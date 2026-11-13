@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Determinants - Question Types</title><style>
+:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c}*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
+.top{background:var(--acc);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.top h1{margin:0;font-size:18px;flex:1;min-width:160px}.top a{color:#fff;font-size:14px}
+.page{max-width:900px;margin:14px auto;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px}
+h1.t{font-size:22px;margin:4px 0 6px}h2{font-size:20px;color:var(--acc);margin:22px 0 6px}h3{font-size:18px;margin:16px 0 4px}
+p{margin:6px 0}math{font-size:1.15em}ul{margin:4px 0 8px;padding-left:24px}
+.gt{border-collapse:collapse;width:100%;margin:8px 0;font-size:16px}.gt td{border:1px solid #c5ccda;padding:6px 8px;vertical-align:top}.gt tr:first-child td{background:#f1f5fb}
+.tw{overflow-x:auto}.btn{border:1px solid var(--acc);background:#fff;color:var(--acc);border-radius:6px;padding:7px 14px;font-size:14px;cursor:pointer;margin:4px 6px 4px 0}.btn.pri{background:var(--acc);color:#fff}
+.sm{font-size:14px;color:var(--mut)}a{color:var(--acc)}
+.typ{border-top:3px solid var(--acc);margin-top:26px;padding-top:4px}
+.ed{width:100%;min-height:54px;font-size:16px;border:1px solid #b9c3d6;border-radius:6px;padding:6px 8px;background:#fffef6;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.7}.ed.tall{min-height:90px}.ed:focus{border-color:#1f4e8c;box-shadow:0 0 0 2px #cfe0fa}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.3}.fr>span{display:block;min-width:.9em;padding:0 3px;min-height:1.2em}.fr>.n{border-bottom:1.5px solid #1d2433}.ed sub,.ed sup{line-height:0}
+#sym .w{min-width:52px;font-weight:700;background:#e8f0fc}
+.rev{display:none;border:2px solid #2e9b4f;background:#f2fbf5;border-radius:10px;padding:6px 14px;margin:12px 0}.rev.on{display:block}.rev h4{margin:6px 0;color:#1f7a3b}
+.how{background:#f7f9fd;border:1px solid var(--line);border-radius:8px;padding:6px 14px}
+@media(max-width:640px){.gt,.gt tbody,.gt tr,.gt td{display:block;width:100%}.gt tr{border:1px solid #c5ccda;margin:8px 0;border-radius:6px;overflow:hidden}.gt td{border:0;border-bottom:1px solid #e3e8f1}.gt td:first-child{background:#f1f5fb;font-weight:600}.gt tr:first-child td{background:inherit}.gt tr:first-child td:first-child{background:#f1f5fb}.page{padding:12px}}
+#sym{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#1f4e8c;padding:6px 8px;display:none;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}#sym.on{display:block}#sym button{display:inline-block;min-width:40px;height:40px;margin:0 3px 0 0;font-size:18px;border:0;border-radius:6px;background:#fff;color:#1d2433;cursor:pointer}#sym span{color:#cfe0fa;font-size:12px;margin-right:8px}body.symon{padding-bottom:60px}
+@media print{#sym{display:none!important}.top,.btn,.noprint{display:none!important}body{background:#fff}.page{border:0}.ed{border:1px solid #999}}
+</style></head><body><div class="top"><h1>Determinants &middot; Question Types</h1><a href="../index.html">&lsaquo; All chapters</a><a href="../Determinants%20PYQ%20Test.html">Back to practice</a><a href="Determinants%20Type%20Notes.html">Type Notes &rsaquo;</a></div><div class="page"><p>JEE Main Maths – Determinants</p>
+<p><b>Types of questions asked in JEE Main 2019–2025 (146 questions)</b></p>
+<p>Key message: these 146 questions fall into only 7 repeating types. The three biggest types (Types 1, 2, 3) account for 90 questions (62%). Systems with no solution or a unique solution (Type 1) alone are 38 questions (26%). About 12% of the questions ask for a numerical (integer) answer, so there are no options to guess from.</p>
+<p>How to read this: a “type” is the formula, law or technique that decides the answer. So every type below tells you what the question looks like and which formula or method to use.</p>
+<h2>1. Summary table</h2>
+<div class="tw"><table class="gt"><tr><td><p><b>Type</b></p></td><td><p><b>What the question tests</b></p></td><td><p><b>No. of Qs</b></p></td><td><p><b>% of chapter</b></p></td><td><p><b>Years seen (of 7)</b></p></td><td><p><b>Difficulty E / M / D</b></p></td></tr><tr><td><p>1</p></td><td><p>No solution, unique solution, consistency and nature of solutions</p></td><td><p>38</p></td><td><p>26.0%</p></td><td><p>7</p></td><td><p>9 / 27 / 2</p></td></tr><tr><td><p>2</p></td><td><p>Infinitely many solutions: find the parameters</p></td><td><p>36</p></td><td><p>24.7%</p></td><td><p>7</p></td><td><p>21 / 15 / 0</p></td></tr><tr><td><p>3</p></td><td><p>Homogeneous systems with a non-trivial solution</p></td><td><p>16</p></td><td><p>11.0%</p></td><td><p>5</p></td><td><p>1 / 14 / 1</p></td></tr><tr><td><p>4</p></td><td><p>Systems linked to geometry, counting or matrices</p></td><td><p>16</p></td><td><p>11.0%</p></td><td><p>7</p></td><td><p>1 / 7 / 8</p></td></tr><tr><td><p>5</p></td><td><p>Evaluating and solving determinants by properties</p></td><td><p>16</p></td><td><p>11.0%</p></td><td><p>5</p></td><td><p>1 / 13 / 2</p></td></tr><tr><td><p>6</p></td><td><p>Determinant as a function of x or θ</p></td><td><p>16</p></td><td><p>11.0%</p></td><td><p>7</p></td><td><p>0 / 12 / 4</p></td></tr><tr><td><p>7</p></td><td><p>Special determinants: scaling, row operations, factorials, [x] and logarithms</p></td><td><p>8</p></td><td><p>5.5%</p></td><td><p>5</p></td><td><p>1 / 3 / 4</p></td></tr><tr><td></td><td><p><b>Total</b></p></td><td><p><b>146</b></p></td><td><p><b>100%</b></p></td><td></td><td><p><b>34 / 91 / 21</b></p></td></tr></table></div>
+<h3>2. Questions per year</h3>
+<p>2019: 24, 2020: 21, 2021: 29, 2022: 17, 2023: 22, 2024: 20, 2025: 13.  (All papers and shifts.)</p>
+<p>Questions asking for an integer answer: 2019: 0, 2020: 4, 2021: 5, 2022: 2, 2023: 2, 2024: 4, 2025: 0.</p>
+<h2>3. Type-by-type detail</h2>
+<h3>Type 1: No solution, unique solution, consistency and nature of solutions  –  38 questions</h3>
+<p><b>What is asked: </b>Decide for which values of the parameters a 3×3 system has no solution, a unique solution or is consistent, or pick the correct (or NOT correct) statement about its solutions.</p>
+<p><b>What to master: </b>Δ ≠ 0 ⇒ unique solution; Δ = 0 with Δx, Δy or Δz ≠ 0 ⇒ no solution; Δ = Δx = Δy = Δz = 0 ⇒ infinitely many or none (check the rank); the augmented matrix after row operations.</p>
+<p><b>Forms that appear: </b>the number of values of λ for which the system has no solution, consistent for all k in a set, (a,b) for which there is no solution, which one of the following is NOT correct, the nature of x + y + z = 6 style systems.</p>
+<p><b>Asked in: </b>2019 (5), 2020 (4), 2021 (10), 2022 (7), 2023 (9), 2024 (2), 2025 (1)</p>
+<p><b>Which form was asked:</b></p>
+<p>Find the parameter, or the number of values, for which the system has no solution, a unique solution or is inconsistent: 18 questions</p>
+<p>Nature of the solution: which statement is correct or NOT correct, and what the system has: 20 questions</p>
+<h3>Type 2: Infinitely many solutions: find the parameters  –  36 questions</h3>
+<p><b>What is asked: </b>Use the condition that a system has infinitely many solutions to find the unknown constants and then a combination such as λ + μ or 2a + 3b.</p>
+<p><b>What to master: </b>Δ = 0 and Δx = Δy = Δz = 0; the third equation is a combination of the first two; elimination to reduce the system; ranks of the coefficient and augmented matrices are equal and less than 3.</p>
+<p><b>Forms that appear: </b>x + y + z = 5 style systems with λ and μ and λ + μ asked, 2a + 3b, α and β given as roots of a quadratic, (λ, μ) as an ordered pair, 13αβ, α + β + 2.</p>
+<p><b>Asked in: </b>2019 (3), 2020 (5), 2021 (4), 2022 (4), 2023 (5), 2024 (8), 2025 (7)</p>
+<p><b>Which form was asked:</b></p>
+<p>Infinitely many solutions: find the two parameters and a simple combination of them: 28 questions</p>
+<p>Infinitely many solutions: ordered pair, a root of an equation or another quantity: 8 questions</p>
+<h3>Type 3: Homogeneous systems with a non-trivial solution  –  16 questions</h3>
+<p><b>What is asked: </b>A homogeneous system is given and a parameter (or an expression in x, y, z) is to be found when it has a non-trivial solution.</p>
+<p><b>What to master: </b>A homogeneous system has non-trivial solutions ⇔ Δ = 0; ratios x : y : z from two equations; the trivial solution always exists.</p>
+<p><b>Forms that appear: </b>the greatest value of c for non-trivial solution, 6α + 9β + 7γ with a row vector times a matrix, sin α and cos α coefficients, k from x + y + z type homogeneous systems, a sum of distinct values of λ.</p>
+<p><b>Asked in: </b>2019 (4), 2020 (4), 2021 (4), 2023 (2), 2024 (2)</p>
+<h3>Type 4: Systems linked to geometry, counting or matrices  –  16 questions</h3>
+<p><b>What is asked: </b>Use a system with parameters together with a distance, a circle, collinear points, integer solutions or a matrix relation.</p>
+<p><b>What to master: </b>Distance of a point from a plane |ax₁ + by₁ + cz₁ + d|/√(a² + b² + c²); equation of a circle touching a line; collinearity; AX = λX; (A − kI)X = B.</p>
+<p><b>Forms that appear: </b>distance of (λ, μ, −1/2) from a plane, the radius of the circle centred at (λ, μ) touching 4x = 3y, collinear points (α, x*), (y*, α), (x*, −y*), integer solutions with 15 ≤ x² + y² + z² ≤ 150, A − 3I with given eigenvectors.</p>
+<p><b>Asked in: </b>2019 (1), 2020 (2), 2021 (2), 2022 (4), 2023 (2), 2024 (3), 2025 (2)</p>
+<h3>Type 5: Evaluating and solving determinants by properties  –  16 questions</h3>
+<p><b>What is asked: </b>Evaluate a 3×3 determinant, prove an identity or solve Δ = 0 using row and column operations and the factor theorem.</p>
+<p><b>What to master: </b>Row and column operations; taking out common factors; a determinant with two identical rows is 0; Δ = 0 at x = a ⇒ (x − a) is a factor; expansion along a row.</p>
+<p><b>Forms that appear: </b>determinant with arithmetic-progression entries, Δ = (a + b + c)(x + a + b + c)², roots of Δ = 0, the sum of the real roots, matrix with entries a_r = cos(2rπ/9) + i sin(2rπ/9).</p>
+<p><b>Asked in: </b>2019 (5), 2020 (3), 2021 (4), 2023 (2), 2024 (2)</p>
+<h3>Type 6: Determinant as a function of x or θ  –  16 questions</h3>
+<p><b>What is asked: </b>A determinant with variable entries defines f(x): find its maximum, minimum, range, derivative, limit or a sum.</p>
+<p><b>What to master: </b>C₁ → C₁ + C₂ + C₃ reduces f(x) to a simple function; range of sin, cos; f′(x) by differentiating one row at a time; Σk, Σk² for a sum over k.</p>
+<p><b>Forms that appear: </b>the maximum and minimum of a determinant with 1 + sin²x entries, f′(0), the minimum value of det(A)/b, the sum of the local maximum and local minimum values of a cubic, ∑ D_k = 96.</p>
+<p><b>Asked in: </b>2019 (3), 2020 (2), 2021 (3), 2022 (1), 2023 (2), 2024 (2), 2025 (3)</p>
+<h3>Type 7: Special determinants: scaling, row operations, factorials, [x] and logarithms  –  8 questions</h3>
+<p><b>What is asked: </b>A determinant whose rows or entries are scaled, operated on, or built from factorials, the greatest integer function or logarithms.</p>
+<p><b>What to master: </b>|kA| = kⁿ|A|; R₂ → 2R₂ + 5R₃ multiplies |A| by 2; (p + 2)! = (p + 2)(p + 1)p!; [x + n] = [x] + n; log(ab) = log a + log b; |AB| = |A||B|.</p>
+<p><b>Forms that appear: </b>R₂ → 2R₂ + 5R₃ on 2A, det(BA⁻¹Bᵀ) from det(ABAᵀ) and det(AB⁻¹), factorial matrix and prime powers p^α and (p + 2)^β, A_r sums.</p>
+<p><b>Asked in: </b>2019 (3), 2020 (1), 2021 (2), 2022 (1), 2024 (1)</p>
+<h2>4. The same patterns keep coming back</h2>
+<p>Number of questions (out of 146) built on each stock pattern:</p>
+<div class="tw"><table class="gt"><tr><td><p><b>Pattern</b></p></td><td><p><b>No. of questions</b></p></td></tr><tr><td><p>System with no solution, unique or consistent, nature of solutions</p></td><td><p>38</p></td></tr><tr><td><p>System with infinitely many solutions</p></td><td><p>36</p></td></tr><tr><td><p>Homogeneous system, non-trivial solution</p></td><td><p>16</p></td></tr><tr><td><p>System combined with geometry, counting or matrices</p></td><td><p>16</p></td></tr><tr><td><p>Evaluate or solve a determinant by properties</p></td><td><p>16</p></td></tr><tr><td><p>Determinant as a function of x or θ</p></td><td><p>16</p></td></tr><tr><td><p>Special determinants (scaling, factorials, [x], logs)</p></td><td><p>8</p></td></tr></table></div>
+<p>A student who has practised each of these patterns until the first step is automatic can handle a large share of the chapter.</p>
+<h2>5. Suggested study order for students</h2>
+<p>Start with systems of linear equations (Types 1 and 2): 74 questions (51%). Master the Δ, Δx, Δy, Δz rule and the row-reduction check.</p>
+<p>Then homogeneous systems and systems combined with geometry (Types 3 and 4): 32 questions (22%).</p>
+<p>Then evaluating determinants, determinants as functions and special determinants (Types 5, 6 and 7): 40 questions.</p>
+<h2>6. A routine to follow for every question</h2>
+<p>Read whether the system is homogeneous and which condition is asked: unique, no solution, infinitely many or non-trivial.</p>
+<p>Write the coefficient matrix and find Δ as a function of the parameter; the special values of the parameter come from Δ = 0.</p>
+<p>For each special value, reduce the augmented matrix (or find Δx) to decide between no solution and infinitely many.</p>
+<p>For determinants with variable entries, use row and column operations to take out common factors before expanding.</p>
+<p>Check the answer by substituting the parameter values back into the original equations.</p></div></body></html>

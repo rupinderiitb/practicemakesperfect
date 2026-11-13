@@ -1,0 +1,84 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Matrices - Question Types</title><style>
+:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c}*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
+.top{background:var(--acc);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.top h1{margin:0;font-size:18px;flex:1;min-width:160px}.top a{color:#fff;font-size:14px}
+.page{max-width:900px;margin:14px auto;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px}
+h1.t{font-size:22px;margin:4px 0 6px}h2{font-size:20px;color:var(--acc);margin:22px 0 6px}h3{font-size:18px;margin:16px 0 4px}
+p{margin:6px 0}math{font-size:1.15em}ul{margin:4px 0 8px;padding-left:24px}
+.gt{border-collapse:collapse;width:100%;margin:8px 0;font-size:16px}.gt td{border:1px solid #c5ccda;padding:6px 8px;vertical-align:top}.gt tr:first-child td{background:#f1f5fb}
+.tw{overflow-x:auto}.btn{border:1px solid var(--acc);background:#fff;color:var(--acc);border-radius:6px;padding:7px 14px;font-size:14px;cursor:pointer;margin:4px 6px 4px 0}.btn.pri{background:var(--acc);color:#fff}
+.sm{font-size:14px;color:var(--mut)}a{color:var(--acc)}
+.typ{border-top:3px solid var(--acc);margin-top:26px;padding-top:4px}
+.ed{width:100%;min-height:54px;font-size:16px;border:1px solid #b9c3d6;border-radius:6px;padding:6px 8px;background:#fffef6;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.7}.ed.tall{min-height:90px}.ed:focus{border-color:#1f4e8c;box-shadow:0 0 0 2px #cfe0fa}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.3}.fr>span{display:block;min-width:.9em;padding:0 3px;min-height:1.2em}.fr>.n{border-bottom:1.5px solid #1d2433}.ed sub,.ed sup{line-height:0}
+#sym .w{min-width:52px;font-weight:700;background:#e8f0fc}
+.rev{display:none;border:2px solid #2e9b4f;background:#f2fbf5;border-radius:10px;padding:6px 14px;margin:12px 0}.rev.on{display:block}.rev h4{margin:6px 0;color:#1f7a3b}
+.how{background:#f7f9fd;border:1px solid var(--line);border-radius:8px;padding:6px 14px}
+@media(max-width:640px){.gt,.gt tbody,.gt tr,.gt td{display:block;width:100%}.gt tr{border:1px solid #c5ccda;margin:8px 0;border-radius:6px;overflow:hidden}.gt td{border:0;border-bottom:1px solid #e3e8f1}.gt td:first-child{background:#f1f5fb;font-weight:600}.gt tr:first-child td{background:inherit}.gt tr:first-child td:first-child{background:#f1f5fb}.page{padding:12px}}
+#sym{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#1f4e8c;padding:6px 8px;display:none;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}#sym.on{display:block}#sym button{display:inline-block;min-width:40px;height:40px;margin:0 3px 0 0;font-size:18px;border:0;border-radius:6px;background:#fff;color:#1d2433;cursor:pointer}#sym span{color:#cfe0fa;font-size:12px;margin-right:8px}body.symon{padding-bottom:60px}
+@media print{#sym{display:none!important}.top,.btn,.noprint{display:none!important}body{background:#fff}.page{border:0}.ed{border:1px solid #999}}
+</style></head><body><div class="top"><h1>Matrices &middot; Question Types</h1><a href="../index.html">&lsaquo; All chapters</a><a href="../Matrices%20PYQ%20Test.html">Back to practice</a><a href="Matrices%20Type%20Notes.html">Type Notes &rsaquo;</a></div><div class="page"><p>JEE Main Maths – Matrices</p>
+<p><b>Types of questions asked in JEE Main 2019–2025 (153 questions)</b></p>
+<p>Key message: these 153 questions fall into only 7 repeating types. The three biggest types (Types 1, 2, 3) account for 94 questions (61%). Adjoint and determinant chains alone (Type 1) are 44 questions (29%). About 37% of the questions ask for a numerical (integer) answer, so there are no options to guess from.</p>
+<p>How to read this: a “type” is the formula, law or technique that decides the answer. So every type below tells you what the question looks like and which formula or method to use.</p>
+<h2>1. Summary table</h2>
+<div class="tw"><table class="gt"><tr><td><p><b>Type</b></p></td><td><p><b>What the question tests</b></p></td><td><p><b>No. of Qs</b></p></td><td><p><b>% of chapter</b></p></td><td><p><b>Years seen (of 7)</b></p></td><td><p><b>Difficulty E / M / D</b></p></td></tr><tr><td><p>1</p></td><td><p>Adjoint and determinant chains</p></td><td><p>44</p></td><td><p>28.8%</p></td><td><p>6</p></td><td><p>4 / 26 / 14</p></td></tr><tr><td><p>2</p></td><td><p>Powers of a matrix, Aⁿ</p></td><td><p>29</p></td><td><p>19.0%</p></td><td><p>7</p></td><td><p>1 / 22 / 6</p></td></tr><tr><td><p>3</p></td><td><p>Inverse, orthogonality and matrix-equation problems</p></td><td><p>21</p></td><td><p>13.7%</p></td><td><p>6</p></td><td><p>4 / 12 / 5</p></td></tr><tr><td><p>4</p></td><td><p>Counting matrices with entries from a given set</p></td><td><p>19</p></td><td><p>12.4%</p></td><td><p>6</p></td><td><p>1 / 12 / 6</p></td></tr><tr><td><p>5</p></td><td><p>Cayley–Hamilton and matrix polynomial equations</p></td><td><p>18</p></td><td><p>11.8%</p></td><td><p>6</p></td><td><p>4 / 10 / 4</p></td></tr><tr><td><p>6</p></td><td><p>Basic operations, trace and unknown entries</p></td><td><p>15</p></td><td><p>9.8%</p></td><td><p>6</p></td><td><p>3 / 12 / 0</p></td></tr><tr><td><p>7</p></td><td><p>Symmetric and skew-symmetric matrices</p></td><td><p>7</p></td><td><p>4.6%</p></td><td><p>4</p></td><td><p>2 / 5 / 0</p></td></tr><tr><td></td><td><p><b>Total</b></p></td><td><p><b>153</b></p></td><td><p><b>100%</b></p></td><td></td><td><p><b>19 / 99 / 35</b></p></td></tr></table></div>
+<h3>2. Questions per year</h3>
+<p>2019: 9, 2020: 11, 2021: 32, 2022: 30, 2023: 29, 2024: 21, 2025: 21.  (All papers and shifts.)</p>
+<p>Questions asking for an integer answer: 2019: 0, 2020: 2, 2021: 19, 2022: 16, 2023: 4, 2024: 8, 2025: 7.</p>
+<h2>3. Type-by-type detail</h2>
+<h3>Type 1: Adjoint and determinant chains  –  44 questions</h3>
+<p><b>What is asked: </b>Find the determinant (or a power of it) of an expression built from adj, scalar multiples and inverses of a 3×3 matrix whose determinant is given, or find A from its adjoint.</p>
+<p><b>What to master: </b>|adj A| = |A|ⁿ⁻¹; |kA| = kⁿ|A|; adj(adj A) = |A|ⁿ⁻²A; |A⁻¹| = 1/|A|; adj(AB) = adj B · adj A; A·adj A = |A|I; prime factorisation of the result.</p>
+<p><b>Forms that appear: </b>|adj(adj(2A))| with |A| given, |3 adj(3A·A²)|, |adj(A adj(2A))| = 2ᵅ3ᵝ5ᵞ, adj A given and |A| asked, n times nested adjoint and a remainder, cofactors with logarithm entries.</p>
+<p><b>Asked in: </b>2020 (2), 2021 (5), 2022 (9), 2023 (11), 2024 (8), 2025 (9)</p>
+<p><b>Which form was asked:</b></p>
+<p>Nested adjoint and scalar multiples: |adj(adj(kA))|, |k·adj(mA)| with |A| given: 27 questions</p>
+<p>Adjoint or cofactor of an explicit matrix, and adjoint properties: 17 questions</p>
+<h3>Type 2: Powers of a matrix, Aⁿ  –  29 questions</h3>
+<p><b>What is asked: </b>Find Aⁿ, a sum A + A² + … + Aᵐ, or a sum of its entries, by splitting A = I + N or by finding the pattern or the period.</p>
+<p><b>What to master: </b>Binomial theorem for (I + N)ⁿ; nilpotent N; rotation matrices R(θ)ⁿ = R(nθ); periodicity (A³ = I, A⁴ = I); entries with ω and i.</p>
+<p><b>Forms that appear: </b>A = [[1,0],[1/2,1]] and P⁵⁰, A = [[1,a,a],[0,1,b],[0,0,1]] and Aⁿ given, A = [[cos θ, −sin θ],[sin θ, cos θ]] and A³², A²⁰²⁵ − A²⁰²⁰, sum of entries of A + A² + … + A²⁰.</p>
+<p><b>Asked in: </b>2019 (3), 2020 (4), 2021 (7), 2022 (6), 2023 (5), 2024 (1), 2025 (3)</p>
+<p><b>Which form was asked:</b></p>
+<p>Powers of a matrix: write A = I + N (N nilpotent), triangular and pattern matrices: 15 questions</p>
+<p>Powers of rotation, cyclic and complex-entry matrices: 14 questions</p>
+<h3>Type 3: Inverse, orthogonality and matrix-equation problems  –  21 questions</h3>
+<p><b>What is asked: </b>Use a given relation such as AAᵀ = I, AB = B, A⁵ = B⁵ or AX = λX to find an unknown, a determinant or the inverse of an expression.</p>
+<p><b>What to master: </b>AAᵀ = I (rows are unit vectors); A⁻¹ = adj A/|A|; (AB)⁻¹ = B⁻¹A⁻¹; invertible ⇔ |A| ≠ 0; AB = B ⇒ (A − I)B = O; AX = λX for a non-zero X.</p>
+<p><b>Forms that appear: </b>AAᵀ = I₃ and |p| asked, B = adj A and |adj B|/|C|, A⁻⁵⁰ for a rotation matrix, f(x) with f(−x) = f(x)⁻¹, invertibility of a matrix with e^t, sin t, cos t entries, AX = λX with A = I − 2MMᵀ.</p>
+<p><b>Asked in: </b>2019 (5), 2020 (2), 2021 (7), 2023 (2), 2024 (3), 2025 (2)</p>
+<h3>Type 4: Counting matrices with entries from a given set  –  19 questions</h3>
+<p><b>What is asked: </b>Count the matrices of a given order with entries from a small set that satisfy a condition on their entries (sum, determinant, A = A⁻¹, singular, symmetric).</p>
+<p><b>What to master: </b>Multiplication principle; counting solutions of a sum condition with restricted values; tr(AAᵀ) = Σaᵢⱼ²; the number of symmetric matrices of order n is kⁿ⁽ⁿ⁺¹⁾ᐟ²; checking a determinant condition by cases.</p>
+<p><b>Forms that appear: </b>singular matrices of order 2 with entries from {2,3,6,9}, 3×3 matrices with entries from {−1,0,1} and tr(AᵀA) = 6, sum of all entries equal to a prime, matrices with det = 15, A = A⁻¹, AB = BA with entries from {1,…,5}.</p>
+<p><b>Asked in: </b>2020 (1), 2021 (5), 2022 (7), 2023 (3), 2024 (1), 2025 (2)</p>
+<h3>Type 5: Cayley–Hamilton and matrix polynomial equations  –  18 questions</h3>
+<p><b>What is asked: </b>Use A² − (tr A)A + |A|I = O (or a given polynomial relation) to find unknown constants, a higher power or the inverse of A.</p>
+<p><b>What to master: </b>Cayley–Hamilton theorem; reducing Aⁿ with the characteristic relation; comparing coefficients; A⁻¹ = (1/|A|)((tr A)I − A) for a 2×2 matrix.</p>
+<p><b>Forms that appear: </b>A² = 3A + αI and A⁴ = 21A + βI, A⁻¹ = αA + βI, A³ = 4A² − A − 21I, A² − A + I = O type relations, A⁵ = αA² + βA + γI, (I + A)⁸ for a matrix with |A| = 0.</p>
+<p><b>Asked in: </b>2020 (1), 2021 (3), 2022 (3), 2023 (5), 2024 (3), 2025 (3)</p>
+<h3>Type 6: Basic operations, trace and unknown entries  –  15 questions</h3>
+<p><b>What is asked: </b>Add, multiply and take the trace of matrices, apply an elementary operation, or find unknown entries from the given matrix relations.</p>
+<p><b>What to master: </b>Row-by-column multiplication; equality of matrices; tr(A) = sum of diagonal entries; tr(AB) = tr(BA); elementary row operations; |AB| = |A||B|.</p>
+<p><b>Forms that appear: </b>which matrix cannot be obtained by a single row operation, the values of a₂₃ from three matrix equations, A + 2B and 2A − B given and Tr(A) − Tr(B), 2×2 matrices with entries from {0,1}, XᵀAᵏX = 33, det X for C = ABAᵀ.</p>
+<p><b>Asked in: </b>2020 (1), 2021 (3), 2022 (3), 2023 (1), 2024 (5), 2025 (2)</p>
+<h3>Type 7: Symmetric and skew-symmetric matrices  –  7 questions</h3>
+<p><b>What is asked: </b>Decide whether an expression built from a symmetric and a skew-symmetric matrix is symmetric or skew-symmetric, or split a matrix into its symmetric and skew-symmetric parts.</p>
+<p><b>What to master: </b>Aᵀ = A and Aᵀ = −A; (AB)ᵀ = BᵀAᵀ; A = ½(A + Aᵀ) + ½(A − Aᵀ); diagonal of a skew-symmetric matrix is zero; Aᵐ is symmetric or skew-symmetric according to m.</p>
+<p><b>Forms that appear: </b>A symmetric and B skew-symmetric with A¹³B²⁶ − B²⁶A¹³, which of AB − BA, AB + BA, A⁴ − B⁴ is not true, A + B given and AB asked, number of symmetric matrices of order 2 with Σaᵢⱼ² = 1.</p>
+<p><b>Asked in: </b>2019 (1), 2021 (2), 2022 (2), 2023 (2)</p>
+<h2>4. The same patterns keep coming back</h2>
+<p>Number of questions (out of 153) built on each stock pattern:</p>
+<div class="tw"><table class="gt"><tr><td><p><b>Pattern</b></p></td><td><p><b>No. of questions</b></p></td></tr><tr><td><p>Adjoint and determinant chain</p></td><td><p>44</p></td></tr><tr><td><p>Power of a matrix, Aⁿ</p></td><td><p>29</p></td></tr><tr><td><p>Inverse, orthogonality or matrix equation</p></td><td><p>21</p></td></tr><tr><td><p>Counting matrices from a set</p></td><td><p>19</p></td></tr><tr><td><p>Cayley–Hamilton or matrix polynomial</p></td><td><p>18</p></td></tr><tr><td><p>Basic operations, trace, unknown entries</p></td><td><p>15</p></td></tr><tr><td><p>Symmetric and skew-symmetric</p></td><td><p>7</p></td></tr></table></div>
+<p>A student who has practised each of these patterns until the first step is automatic can handle a large share of the chapter.</p>
+<h2>5. Suggested study order for students</h2>
+<p>Start with adjoint and determinant chains (Type 1): 44 questions (29%). Master |adj A|, |kA| and adj(adj A) for 3×3 matrices.</p>
+<p>Then powers of a matrix and inverse or matrix-equation problems (Types 2 and 3): 50 questions (33%).</p>
+<p>Then counting matrices, Cayley–Hamilton, basic operations and symmetric matrices (Types 4, 5, 6 and 7): 59 questions.</p>
+<h2>6. A routine to follow for every question</h2>
+<p>Read the order of the matrix (2×2 or 3×3) and write down what is given: |A|, a relation such as A² = αA + βI, or the set the entries come from.</p>
+<p>Adjoint chains are the largest block: reduce them with |adj A| = |A|ⁿ⁻¹ and |kA| = kⁿ|A| from the inside outwards.</p>
+<p>For powers of a matrix, look for A = I + N, a rotation or a period before multiplying out.</p>
+<p>For 2×2 matrices think of the Cayley–Hamilton relation first; for counting questions fix the structure and count cases.</p>
+<p>Check the answer against the options by taking the determinant or the trace, which are quick tests for most matrix identities.</p></div></body></html>
