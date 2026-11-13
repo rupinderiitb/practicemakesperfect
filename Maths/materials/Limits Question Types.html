@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Limits - Question Types</title><style>
+:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c}*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
+.top{background:var(--acc);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.top h1{margin:0;font-size:18px;flex:1;min-width:160px}.top a{color:#fff;font-size:14px}
+.page{max-width:900px;margin:14px auto;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px}
+h1.t{font-size:22px;margin:4px 0 6px}h2{font-size:20px;color:var(--acc);margin:22px 0 6px}h3{font-size:18px;margin:16px 0 4px}
+p{margin:6px 0}math{font-size:1.15em}ul{margin:4px 0 8px;padding-left:24px}
+.gt{border-collapse:collapse;width:100%;margin:8px 0;font-size:16px}.gt td{border:1px solid #c5ccda;padding:6px 8px;vertical-align:top}.gt tr:first-child td{background:#f1f5fb}
+.tw{overflow-x:auto}.btn{border:1px solid var(--acc);background:#fff;color:var(--acc);border-radius:6px;padding:7px 14px;font-size:14px;cursor:pointer;margin:4px 6px 4px 0}.btn.pri{background:var(--acc);color:#fff}
+.sm{font-size:14px;color:var(--mut)}a{color:var(--acc)}
+.typ{border-top:3px solid var(--acc);margin-top:26px;padding-top:4px}
+.ed{width:100%;min-height:54px;font-size:16px;border:1px solid #b9c3d6;border-radius:6px;padding:6px 8px;background:#fffef6;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.7}.ed.tall{min-height:90px}.ed:focus{border-color:#1f4e8c;box-shadow:0 0 0 2px #cfe0fa}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.3}.fr>span{display:block;min-width:.9em;padding:0 3px;min-height:1.2em}.fr>.n{border-bottom:1.5px solid #1d2433}.ed sub,.ed sup{line-height:0}
+#sym .w{min-width:52px;font-weight:700;background:#e8f0fc}
+.rev{display:none;border:2px solid #2e9b4f;background:#f2fbf5;border-radius:10px;padding:6px 14px;margin:12px 0}.rev.on{display:block}.rev h4{margin:6px 0;color:#1f7a3b}
+.how{background:#f7f9fd;border:1px solid var(--line);border-radius:8px;padding:6px 14px}
+@media(max-width:640px){.gt,.gt tbody,.gt tr,.gt td{display:block;width:100%}.gt tr{border:1px solid #c5ccda;margin:8px 0;border-radius:6px;overflow:hidden}.gt td{border:0;border-bottom:1px solid #e3e8f1}.gt td:first-child{background:#f1f5fb;font-weight:600}.gt tr:first-child td{background:inherit}.gt tr:first-child td:first-child{background:#f1f5fb}.page{padding:12px}}
+#sym{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#1f4e8c;padding:6px 8px;display:none;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}#sym.on{display:block}#sym button{display:inline-block;min-width:40px;height:40px;margin:0 3px 0 0;font-size:18px;border:0;border-radius:6px;background:#fff;color:#1d2433;cursor:pointer}#sym span{color:#cfe0fa;font-size:12px;margin-right:8px}body.symon{padding-bottom:60px}
+@media print{#sym{display:none!important}.top,.btn,.noprint{display:none!important}body{background:#fff}.page{border:0}.ed{border:1px solid #999}}
+</style></head><body><div class="top"><h1>Limits &middot; Question Types</h1><a href="../index.html">&lsaquo; All chapters</a><a href="../Limits%20PYQ%20Practice.html">Back to practice</a><a href="Limits%20Type%20Notes.html">Type Notes &rsaquo;</a></div><div class="page"><p>JEE Main Maths – Limits</p>
+<p><b>Types of questions asked in JEE Main 2019–2025 (100 questions)</b></p>
+<p>Key message: these 100 questions fall into only 6 repeating types. The three biggest types (Types 1, 2, 3) account for 62 questions (62%). Standard limits (Types 1 and 2) alone are 44 questions (44%). About 25% of the questions ask for a numerical (integer) answer, so there are no options to guess from.</p>
+<p>How to read this: a “type” is the formula, law or technique that decides the answer. So every type below tells you what the question looks like and which formula or method to use.</p>
+<h2>1. Summary table</h2>
+<div class="tw"><table class="gt"><tr><td><p><b>Type</b></p></td><td><p><b>What the question tests</b></p></td><td><p><b>No. of Qs</b></p></td><td><p><b>% of chapter</b></p></td><td><p><b>Years seen (of 7)</b></p></td><td><p><b>Difficulty E / M / D</b></p></td></tr><tr><td><p>1</p></td><td><p>Exponential, logarithmic and 1^∞ limits, and limits at infinity</p></td><td><p>23</p></td><td><p>23.0%</p></td><td><p>6</p></td><td><p>4 / 15 / 4</p></td></tr><tr><td><p>2</p></td><td><p>Standard trigonometric and inverse-trigonometric limits</p></td><td><p>21</p></td><td><p>21.0%</p></td><td><p>7</p></td><td><p>2 / 19 / 0</p></td></tr><tr><td><p>3</p></td><td><p>Finding constants from a finite-limit condition</p></td><td><p>18</p></td><td><p>18.0%</p></td><td><p>7</p></td><td><p>1 / 11 / 6</p></td></tr><tr><td><p>4</p></td><td><p>Functional and derivative-based limits (f differentiable, integrals)</p></td><td><p>18</p></td><td><p>18.0%</p></td><td><p>6</p></td><td><p>3 / 9 / 6</p></td></tr><tr><td><p>5</p></td><td><p>Greatest integer, fractional part, piecewise functions and existence of a limit</p></td><td><p>15</p></td><td><p>15.0%</p></td><td><p>7</p></td><td><p>2 / 4 / 9</p></td></tr><tr><td><p>6</p></td><td><p>Algebraic limits: factorisation and rationalisation</p></td><td><p>5</p></td><td><p>5.0%</p></td><td><p>3</p></td><td><p>1 / 4 / 0</p></td></tr><tr><td></td><td><p><b>Total</b></p></td><td><p><b>100</b></p></td><td><p><b>100%</b></p></td><td></td><td><p><b>13 / 62 / 25</b></p></td></tr></table></div>
+<h3>2. Questions per year</h3>
+<p>2019: 12, 2020: 10, 2021: 19, 2022: 14, 2023: 10, 2024: 22, 2025: 13.  (All papers and shifts.)</p>
+<p>Questions asking for an integer answer: 2019: 0, 2020: 3, 2021: 5, 2022: 3, 2023: 0, 2024: 9, 2025: 5.</p>
+<h2>3. Type-by-type detail</h2>
+<h3>Type 1: Exponential, logarithmic and 1^∞ limits, and limits at infinity  –  23 questions</h3>
+<p><b>What is asked: </b>A limit of the form 1^∞, an exponential or logarithmic expansion, or a limit as x or n → ∞ is to be evaluated.</p>
+<p><b>What to master: </b>(1 + u)^v → e^{lim uv}; (e^x − 1)/x → 1; ln(1 + x)/x → 1; divide by the highest power at infinity; rationalise radicals.</p>
+<p><b>Forms that appear: </b>(tan(π/4 + x))^{1/x}, (cos x)^{cot x}, (2 − cos x)/(cos 2x))^{(x+2)/x²}, lim (√(x² − x + 1) − ax) = b, sums and products as n → ∞.</p>
+<p><b>Asked in: </b>2020 (4), 2021 (5), 2022 (1), 2023 (4), 2024 (5), 2025 (4)</p>
+<p><b>Which form was asked:</b></p>
+<p>1^∞ forms and exponential-power limits: 9 questions</p>
+<p>Exponential, logarithmic and inverse-trigonometric limits by expansion: 5 questions</p>
+<p>Limits at infinity: sums, products and radicals: 9 questions</p>
+<h3>Type 2: Standard trigonometric and inverse-trigonometric limits  –  21 questions</h3>
+<p><b>What is asked: </b>A ratio of trigonometric (or inverse-trigonometric) functions at a point is to be evaluated.</p>
+<p><b>What to master: </b>sin x/x, tan x/x → 1; (1 − cos x)/x² → ½; substitute x = a + h; use sin(2x) and cos(2x) identities; rationalise radicals.</p>
+<p><b>Forms that appear: </b>sin²(π cos⁴x)/x⁴, tan(π cos²θ)/sin(2π sin²θ), (cot³x − tan x)/cos(x + π/4) at π/4, (x² − 1) sin²(πx)/(x⁴ − 2x³ + 2x − 1).</p>
+<p><b>Asked in: </b>2019 (4), 2020 (1), 2021 (5), 2022 (5), 2023 (1), 2024 (2), 2025 (3)</p>
+<p><b>Which form was asked:</b></p>
+<p>Direct trigonometric ratios and 1 − cos forms: 13 questions</p>
+<p>Trigonometric limits with radicals and products: 5 questions</p>
+<p>Mixed standard limits (sin, tan, log, e together): 3 questions</p>
+<h3>Type 3: Finding constants from a finite-limit condition  –  18 questions</h3>
+<p><b>What is asked: </b>A limit equal to a given number (or finite) fixes unknown constants a, b, c, α, β, γ, λ, μ; a combination of them is asked.</p>
+<p><b>What to master: </b>For a finite 0/0 limit, every coefficient of x^k below the order of the denominator must vanish; the leading one equals the given value.</p>
+<p><b>Forms that appear: </b>(cos 2x + a cos 4x − b)/x⁴ finite, (a x² eˣ − b ln(1 + x) + c x e⁻ˣ)/(x² sin x) = 1, (x−1)(6 + λ cos(x−1)) + μ sin(1−x) over (x−1)³ = −1.</p>
+<p><b>Asked in: </b>2019 (1), 2020 (1), 2021 (4), 2022 (4), 2023 (2), 2024 (3), 2025 (3)</p>
+<h3>Type 4: Functional and derivative-based limits (f differentiable, integrals)  –  18 questions</h3>
+<p><b>What is asked: </b>A limit involves an unknown differentiable function f (values f(a), f′(a) given) or an integral with a variable limit.</p>
+<p><b>What to master: </b>f′(a) = lim (f(x) − f(a))/(x − a); L&#x27;Hôpital with Leibniz: d/dx ∫ g = g(h(x)) h′(x) − g(k(x)) k′(x).</p>
+<p><b>Forms that appear: </b>lim (x² f(2) − 4 f(x))/(x − 2) with f(2) = 4, f′(2) = 1; lim (x f(a) − a f(x))/(x − a); lim (1/(x − π/2)²) ∫ cos(t^{1/3}) dt; lim f(x)/x³ for f = ∫(t + sin(1 − eᵗ))dt.</p>
+<p><b>Asked in: </b>2019 (1), 2020 (2), 2021 (3), 2022 (1), 2024 (9), 2025 (2)</p>
+<h3>Type 5: Greatest integer, fractional part, piecewise functions and existence of a limit  –  15 questions</h3>
+<p><b>What is asked: </b>A limit containing [x], {x} or a piecewise definition is to be found, or the values for which it exists are asked.</p>
+<p><b>What to master: </b>Evaluate [x] separately for x → a⁻ and x → a⁺; a limit exists only if both one-sided limits are equal.</p>
+<p><b>Forms that appear: </b>lim x([x] + x) sin[x]/x at 0⁻, the set of a for which lim ([x − 5] − [2x + 2]) = 0, integer a with lim (18 − [1 − x])/[x − 3a] at 7 existing.</p>
+<p><b>Asked in: </b>2019 (3), 2020 (1), 2021 (2), 2022 (3), 2023 (3), 2024 (2), 2025 (1)</p>
+<h3>Type 6: Algebraic limits: factorisation and rationalisation  –  5 questions</h3>
+<p><b>What is asked: </b>A ratio of powers, roots or polynomials gives 0/0 at a point and is evaluated by factorising or rationalising.</p>
+<p><b>What to master: </b>(xⁿ − aⁿ)/(x − a) → n aⁿ⁻¹; multiply by the conjugate to remove a square root; use fractional powers as roots.</p>
+<p><b>Forms that appear: </b>(x⁴ − 1)/(x − 1) = (xᵏ³ − k³)/(x² − k²) to find k, ((a + 2x)^{1/3} − (3x)^{1/3})/((3a + x)^{1/3} − (4x)^{1/3}).</p>
+<p><b>Asked in: </b>2019 (3), 2020 (1), 2024 (1)</p>
+<h2>4. The same patterns keep coming back</h2>
+<p>Number of questions (out of 100) built on each stock pattern:</p>
+<div class="tw"><table class="gt"><tr><td><p><b>Pattern</b></p></td><td><p><b>No. of questions</b></p></td></tr><tr><td><p>Exponential, logarithmic and 1^∞ limits; limits at infinity</p></td><td><p>23</p></td></tr><tr><td><p>Standard trigonometric limits</p></td><td><p>21</p></td></tr><tr><td><p>Constants from a finite-limit condition</p></td><td><p>18</p></td></tr><tr><td><p>Functional and integral-based limits</p></td><td><p>18</p></td></tr><tr><td><p>Greatest integer, piecewise and existence of a limit</p></td><td><p>15</p></td></tr><tr><td><p>Algebraic limits</p></td><td><p>5</p></td></tr></table></div>
+<p>A student who has practised each of these patterns until the first step is automatic can handle a large share of the chapter.</p>
+<h2>5. Suggested study order for students</h2>
+<p>Start with the exponential, logarithmic and trigonometric limits (Types 1 and 2): 44 questions (44%). Master the standard limits and the e^{lim uv} rule.</p>
+<p>Then finding constants and functional limits (Types 3 and 4): 36 questions (36%).</p>
+<p>Then greatest-integer and algebraic limits (Types 5 and 6): 20 questions.</p>
+<h2>6. A routine to follow for every question</h2>
+<p>Substitute the limit point: if the form is 0/0, ∞/∞ or 1^∞, a standard method is needed.</p>
+<p>Pick the method: factorise or rationalise, use a standard limit, expand in a series, or L&#x27;Hôpital.</p>
+<p>For a 1^∞ form, write the limit as e^{lim uv}; for x → ∞, divide by the highest power.</p>
+<p>With [x] or a piecewise definition, find the left and right limits separately.</p>
+<p>Check the answer by plugging in a small value (for example x = 0.01) in your calculator.</p></div></body></html>

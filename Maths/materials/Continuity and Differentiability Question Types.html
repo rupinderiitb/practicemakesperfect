@@ -1,0 +1,81 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Continuity and Differentiability - Question Types</title><style>
+:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c}*{box-sizing:border-box}
+body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
+.top{background:var(--acc);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}.top h1{margin:0;font-size:18px;flex:1;min-width:160px}.top a{color:#fff;font-size:14px}
+.page{max-width:900px;margin:14px auto;padding:16px 20px;background:#fff;border:1px solid var(--line);border-radius:10px}
+h1.t{font-size:22px;margin:4px 0 6px}h2{font-size:20px;color:var(--acc);margin:22px 0 6px}h3{font-size:18px;margin:16px 0 4px}
+p{margin:6px 0}math{font-size:1.15em}ul{margin:4px 0 8px;padding-left:24px}
+.gt{border-collapse:collapse;width:100%;margin:8px 0;font-size:16px}.gt td{border:1px solid #c5ccda;padding:6px 8px;vertical-align:top}.gt tr:first-child td{background:#f1f5fb}
+.tw{overflow-x:auto}.btn{border:1px solid var(--acc);background:#fff;color:var(--acc);border-radius:6px;padding:7px 14px;font-size:14px;cursor:pointer;margin:4px 6px 4px 0}.btn.pri{background:var(--acc);color:#fff}
+.sm{font-size:14px;color:var(--mut)}a{color:var(--acc)}
+.typ{border-top:3px solid var(--acc);margin-top:26px;padding-top:4px}
+.ed{width:100%;min-height:54px;font-size:16px;border:1px solid #b9c3d6;border-radius:6px;padding:6px 8px;background:#fffef6;outline:none;white-space:pre-wrap;word-break:break-word;line-height:1.7}.ed.tall{min-height:90px}.ed:focus{border-color:#1f4e8c;box-shadow:0 0 0 2px #cfe0fa}
+.fr{display:inline-flex;flex-direction:column;vertical-align:middle;text-align:center;margin:0 3px;line-height:1.3}.fr>span{display:block;min-width:.9em;padding:0 3px;min-height:1.2em}.fr>.n{border-bottom:1.5px solid #1d2433}.ed sub,.ed sup{line-height:0}
+#sym .w{min-width:52px;font-weight:700;background:#e8f0fc}
+.rev{display:none;border:2px solid #2e9b4f;background:#f2fbf5;border-radius:10px;padding:6px 14px;margin:12px 0}.rev.on{display:block}.rev h4{margin:6px 0;color:#1f7a3b}
+.how{background:#f7f9fd;border:1px solid var(--line);border-radius:8px;padding:6px 14px}
+@media(max-width:640px){.gt,.gt tbody,.gt tr,.gt td{display:block;width:100%}.gt tr{border:1px solid #c5ccda;margin:8px 0;border-radius:6px;overflow:hidden}.gt td{border:0;border-bottom:1px solid #e3e8f1}.gt td:first-child{background:#f1f5fb;font-weight:600}.gt tr:first-child td{background:inherit}.gt tr:first-child td:first-child{background:#f1f5fb}.page{padding:12px}}
+#sym{position:fixed;left:0;right:0;bottom:0;z-index:20;background:#1f4e8c;padding:6px 8px;display:none;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch}#sym.on{display:block}#sym button{display:inline-block;min-width:40px;height:40px;margin:0 3px 0 0;font-size:18px;border:0;border-radius:6px;background:#fff;color:#1d2433;cursor:pointer}#sym span{color:#cfe0fa;font-size:12px;margin-right:8px}body.symon{padding-bottom:60px}
+@media print{#sym{display:none!important}.top,.btn,.noprint{display:none!important}body{background:#fff}.page{border:0}.ed{border:1px solid #999}}
+</style></head><body><div class="top"><h1>Continuity and Differentiability &middot; Question Types</h1><a href="../index.html">&lsaquo; All chapters</a><a href="../Continuity%20and%20Differentiability%20PYQ%20Practice.html">Back to practice</a><a href="Continuity%20and%20Differentiability%20Type%20Notes.html">Type Notes &rsaquo;</a></div><div class="page"><p>JEE Main Maths – Continuity and Differentiability</p>
+<p><b>Types of questions asked in JEE Main 2019–2025 (106 questions)</b></p>
+<p>Key message: these 106 questions fall into only 6 repeating types. The three biggest types (Types 1, 2, 3) account for 72 questions (68%). Non-differentiability counts (Type 1) alone are 28 questions (26%). About 29% of the questions ask for a numerical (integer) answer, so there are no options to guess from.</p>
+<p>How to read this: a “type” is the formula, law or technique that decides the answer. So every type below tells you what the question looks like and which formula or method to use.</p>
+<h2>1. Summary table</h2>
+<div class="tw"><table class="gt"><tr><td><p><b>Type</b></p></td><td><p><b>What the question tests</b></p></td><td><p><b>No. of Qs</b></p></td><td><p><b>% of chapter</b></p></td><td><p><b>Years seen (of 7)</b></p></td><td><p><b>Difficulty E / M / D</b></p></td></tr><tr><td><p>1</p></td><td><p>Points of non-differentiability: modulus, max/min and greatest-integer functions</p></td><td><p>28</p></td><td><p>26.4%</p></td><td><p>7</p></td><td><p>5 / 19 / 4</p></td></tr><tr><td><p>2</p></td><td><p>Continuity: finding constants by evaluating limits at the junction</p></td><td><p>25</p></td><td><p>23.6%</p></td><td><p>7</p></td><td><p>7 / 17 / 1</p></td></tr><tr><td><p>3</p></td><td><p>Points of discontinuity: composite and greatest-integer functions</p></td><td><p>19</p></td><td><p>17.9%</p></td><td><p>7</p></td><td><p>3 / 11 / 5</p></td></tr><tr><td><p>4</p></td><td><p>Constants of a piecewise function from continuity or differentiability</p></td><td><p>17</p></td><td><p>16.0%</p></td><td><p>7</p></td><td><p>7 / 8 / 2</p></td></tr><tr><td><p>5</p></td><td><p>Testing continuity or differentiability at a point or on a set</p></td><td><p>10</p></td><td><p>9.4%</p></td><td><p>5</p></td><td><p>3 / 7 / 0</p></td></tr><tr><td><p>6</p></td><td><p>Functional equations and abstract functions</p></td><td><p>7</p></td><td><p>6.6%</p></td><td><p>5</p></td><td><p>2 / 4 / 1</p></td></tr><tr><td></td><td><p><b>Total</b></p></td><td><p><b>106</b></p></td><td><p><b>100%</b></p></td><td></td><td><p><b>27 / 66 / 13</b></p></td></tr></table></div>
+<h3>2. Questions per year</h3>
+<p>2019: 14, 2020: 10, 2021: 28, 2022: 18, 2023: 10, 2024: 17, 2025: 9.  (All papers and shifts.)</p>
+<p>Questions asking for an integer answer: 2019: 0, 2020: 4, 2021: 11, 2022: 4, 2023: 4, 2024: 4, 2025: 4.</p>
+<h2>3. Type-by-type detail</h2>
+<h3>Type 1: Points of non-differentiability: modulus, max/min and greatest-integer functions  –  28 questions</h3>
+<p><b>What is asked: </b>A function built from |·|, max, min or [·] is given and the number (or set) of points where it is not differentiable is asked.</p>
+<p><b>What to master: </b>Corners where the left and right derivatives differ; |f| has a corner where f changes sign with f′ ≠ 0; max/min switches where the graphs cross; [x] terms give jumps at integers.</p>
+<p><b>Forms that appear: </b>the number of points where |x² − 2x − 3|e^{9x² − 12x + 4} is not differentiable, max{x, x²}, min{sin x, cos x}, f(x) = min{|x|, 2 − x²} with [|x|], |x − 1| + |x − 2| type sums, the set of points for f(f(x)) = 15 − |x − 10|.</p>
+<p><b>Asked in: </b>2019 (6), 2020 (2), 2021 (7), 2022 (6), 2023 (2), 2024 (3), 2025 (2)</p>
+<p><b>Which form was asked:</b></p>
+<p>Modulus functions: points where f is not differentiable (including |f(x)| combinations): 10 questions</p>
+<p>Maximum or minimum of functions: points of non-differentiability: 8 questions</p>
+<p>Greatest integer and fractional-part terms: points of non-differentiability: 7 questions</p>
+<p>Composite and piecewise combinations: count the non-differentiable points: 3 questions</p>
+<h3>Type 2: Continuity: finding constants by evaluating limits at the junction  –  25 questions</h3>
+<p><b>What is asked: </b>A piecewise function with unknown constants is continuous at a point; find the constants (or an expression in them) by evaluating the limits.</p>
+<p><b>What to master: </b>Left limit = right limit = f(a); sin x/x → 1, (1 − cos x)/x² → ½, log(1 + x)/x → 1, (e^x − 1)/x → 1, (1 + kx)^{1/x} → e^k.</p>
+<p><b>Forms that appear: </b>continuity at x = 0 of (sin(a + 2)x + sin x)/x, of (1 + sin x)^{3a/sin x}, (1 + cos x)^{λ/cos x}, ratios of radicals with x^{1/3}, 72^x − 9^x − 8^x + 1 over a cosine difference, find a + 2b or 6a + b².</p>
+<p><b>Asked in: </b>2019 (2), 2020 (2), 2021 (9), 2022 (3), 2023 (1), 2024 (6), 2025 (2)</p>
+<p><b>Which form was asked:</b></p>
+<p>Continuity: constants from sin, tan, log and cos ratio limits: 18 questions</p>
+<p>Continuity: constants from exponential, 1^∞ and radical limits: 7 questions</p>
+<h3>Type 3: Points of discontinuity: composite and greatest-integer functions  –  19 questions</h3>
+<p><b>What is asked: </b>Count the points where a function containing [·] (or a composition fog, gof) is discontinuous.</p>
+<p><b>What to master: </b>[g(x)] jumps where g(x) is an integer and g is not constant there; at a break point compare left and right limits and the value; a composite is discontinuous where the inner function hits a break point of the outer function.</p>
+<p><b>Forms that appear: </b>the number of points where [x²/2] − [√x] on [0, 4] is discontinuous, [4x² − 1] on (−1, 1) with modulus branches, [x] with sin(π/([x] + 3)), fog for [x] and |1 − x| with e^x − x.</p>
+<p><b>Asked in: </b>2019 (2), 2020 (2), 2021 (2), 2022 (4), 2023 (4), 2024 (2), 2025 (3)</p>
+<h3>Type 4: Constants of a piecewise function from continuity or differentiability  –  17 questions</h3>
+<p><b>What is asked: </b>Determine the unknown constants of a piecewise function using continuity (and, when stated, differentiability) at the junctions, then evaluate a combination of them.</p>
+<p><b>What to master: </b>Continuity: equal values; differentiability: equal values and equal one-sided derivatives; use several junctions when there are three or more pieces.</p>
+<p><b>Forms that appear: </b>f = 1/x for x ≥ 1 and ax² + b below, differentiable on R, 48(a + b); x² + 3x + a and bx + 2, ∫ of f over [−2, 2]; ae^x + be^{−x}, cx², ax² + 2cx with f′(0) + f′(2) = e; g linear with a limit branch.</p>
+<p><b>Asked in: </b>2019 (2), 2020 (3), 2021 (3), 2022 (3), 2023 (1), 2024 (4), 2025 (1)</p>
+<h3>Type 5: Testing continuity or differentiability at a point or on a set  –  10 questions</h3>
+<p><b>What is asked: </b>A function is given (piecewise, integral-defined or with [x]) and the correct statement about its continuity or differentiability is to be chosen.</p>
+<p><b>What to master: </b>Continuous at a if the limits match; differentiable at a if the limits of the difference quotient from both sides match; d/dx ∫ f = f; |x| is not differentiable at 0.</p>
+<p><b>Forms that appear: </b>x² sin(1/x) at 0, f(x) = ∫₀ˣ[y] dy, π/4 + tan⁻¹x or ½(|x| − 1) on R − {±1}, f continuous at 4 with an integral branch and which statement is NOT true, [x − 1]cos((2x − 1)π/2).</p>
+<p><b>Asked in: </b>2019 (1), 2020 (1), 2021 (5), 2022 (2), 2023 (1)</p>
+<h3>Type 6: Functional equations and abstract functions  –  7 questions</h3>
+<p><b>What is asked: </b>A relation such as f(x + y) = f(x)f(y), an inequality on |f(x) − f(y)| or a differential-type condition is given; deduce f and evaluate an integral, limit or value.</p>
+<p><b>What to master: </b>f′(x) = lim (f(x + h) − f(x))/h with the functional equation; |f(x) − f(y)| ≤ k|x − y|^p, p &gt; 1 ⇒ f′ = 0; differentiate integrals and limits.</p>
+<p><b>Forms that appear: </b>f(x + y) = f(x)f(y) with f′(0) = 3 and the limit of (f(h) − 1)/h, f(x/y) = f(x)/f(y) with f′(1) = 2024, |f(x) − f(y)| ≤ 2|x − y|^{3/2} and ∫₀¹ f²(x) dx, f″ = g″ + 6x.</p>
+<p><b>Asked in: </b>2019 (1), 2021 (2), 2023 (1), 2024 (2), 2025 (1)</p>
+<h2>4. The same patterns keep coming back</h2>
+<p>Number of questions (out of 106) built on each stock pattern:</p>
+<div class="tw"><table class="gt"><tr><td><p><b>Pattern</b></p></td><td><p><b>No. of questions</b></p></td></tr><tr><td><p>Non-differentiable points of modulus, max/min and [x] functions</p></td><td><p>28</p></td></tr><tr><td><p>Continuity: constants from limits at the junction</p></td><td><p>25</p></td></tr><tr><td><p>Points of discontinuity: [x] and composite functions</p></td><td><p>19</p></td></tr><tr><td><p>Constants of a piecewise function from continuity or differentiability</p></td><td><p>17</p></td></tr><tr><td><p>Continuity or differentiability at a point</p></td><td><p>10</p></td></tr><tr><td><p>Functional equations and abstract functions</p></td><td><p>7</p></td></tr></table></div>
+<p>A student who has practised each of these patterns until the first step is automatic can handle a large share of the chapter.</p>
+<h2>5. Suggested study order for students</h2>
+<p>Start with counting the points of non-differentiability and discontinuity (Types 1 and 3): 47 questions (44%). Master the corner test and the jump test for [x].</p>
+<p>Then finding constants by limits and by matching pieces (Types 2 and 4): 42 questions (40%).</p>
+<p>Then testing statements at a point and functional equations (Types 5 and 6): 17 questions.</p>
+<h2>6. A routine to follow for every question</h2>
+<p>Read what is asked: continuity, differentiability, the number of points, or the value of a constant.</p>
+<p>Identify the break points: zeros of modulus expressions, switch points of max/min, integers where [·] jumps, and the junctions of the pieces.</p>
+<p>At each break point compare the left and right limits (continuity) and then the left and right derivatives (differentiability).</p>
+<p>Use the standard limits for the constants, and count only the points that really fail (check cancellations and jumps that are removed).</p>
+<p>Check the answer by substituting the constants back and testing one point on each side of every break point.</p></div></body></html>
