@@ -1,13 +1,13 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Limits PYQ Practice</title>
 <style>
-:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c}
+:root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c;--accl:#e8f0fc;--accb:#9bb4de;--hdr:#1f4e8c;--hdrtx:#fff;--tmbg:rgba(255,255,255,.15);--hdrline:transparent}
 *{box-sizing:border-box}body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
-.top{position:sticky;top:0;z-index:9;background:var(--acc);color:#fff;padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.top h1{margin:0;font-size:18px;flex:1;min-width:140px}.top .tm{font-size:14px;background:rgba(255,255,255,.15);border-radius:6px;padding:3px 10px;font-variant-numeric:tabular-nums}
+.top{position:sticky;top:0;z-index:9;background:var(--hdr);color:var(--hdrtx);border-bottom:3px solid var(--hdrline);padding:8px 16px;display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.top h1{margin:0;font-size:18px;flex:1;min-width:140px}.top .tm{font-size:14px;background:var(--tmbg);border-radius:6px;padding:3px 10px;font-variant-numeric:tabular-nums}
 .btn{border:1px solid var(--acc);background:#fff;color:var(--acc);border-radius:6px;padding:7px 14px;font-size:14px;cursor:pointer}
 .btn.pri{background:var(--acc);color:#fff}.btn.grn{background:#2e9b4f;border-color:#2e9b4f;color:#fff}.btn.pur{background:#7b3fb0;border-color:#7b3fb0;color:#fff}.btn:disabled{opacity:.45;cursor:default}
-.top .btn{border-color:#fff}
+.top .btn{border-color:var(--hdrtx)}
 .wrap{max-width:1100px;margin:14px auto;padding:0 12px;display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:14px}
 .main{min-width:0;background:#fff;border:1px solid var(--line);border-radius:10px;min-height:60vh;display:flex;flex-direction:column}
 .qhead{display:flex;justify-content:space-between;align-items:center;padding:10px 18px;border-bottom:1px solid var(--line);background:#f7f9fd;border-radius:10px 10px 0 0;gap:10px;flex-wrap:wrap}
@@ -18,7 +18,7 @@
 math{font-size:1.2em}
 .opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:16px}
 .o{display:flex;gap:12px;align-items:center;border:2px solid #cfd6e4;border-radius:10px;padding:10px 14px;cursor:pointer;background:#fff;min-height:54px}
-.o:hover{border-color:#9bb4de}.o.sel{border-color:var(--acc);background:#e8f0fc}
+.o:hover{border-color:var(--accb)}.o.sel{border-color:var(--acc);background:var(--accl)}
 .ol{flex:none;width:30px;height:30px;border-radius:50%;border:2px solid #b9c3d6;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
 .o.sel .ol{background:var(--acc);border-color:var(--acc);color:#fff}
 .oc{flex:1;overflow-x:auto}
@@ -28,7 +28,7 @@ math{font-size:1.2em}
 .side h3{margin:0 0 8px;font-size:14px;color:var(--mut)}
 #nav{display:flex;flex-wrap:wrap;gap:6px}
 #nav button{width:34px;height:34px;font-size:13px;font-weight:700;color:#fff;border:0;cursor:pointer;background:#aeb6c5;border-radius:6px;position:relative}
-#nav button.cur{outline:3px solid #1f4e8c;outline-offset:1px}
+#nav button.cur{outline:3px solid var(--acc);outline-offset:1px}
 #nav .nv{background:#e4e8f0;color:#444;border:1px solid #c5ccda}#nav .na{background:#d9402f;border-radius:6px 6px 17px 17px}#nav .an{background:#1f6fd0;border-radius:17px 17px 6px 6px}#nav .ok{background:#2e9b4f;border-radius:17px 17px 6px 6px}#nav .bd{background:#e07b00;border-radius:17px 17px 6px 6px}
 #nav .mk,#nav .am{background:#7b3fb0;border-radius:50%}#nav .am::after{content:"";position:absolute;right:-1px;bottom:-1px;width:12px;height:12px;border-radius:50%;background:#1f6fd0;border:2px solid #fff}#nav .am.dr::after{background:#2e9b4f}#nav .am.dw::after{background:#e07b00}
 #nav button.st::before{content:"\2605";position:absolute;top:-7px;right:-4px;font-size:14px;color:#f5b301;text-shadow:0 0 2px #fff,0 0 2px #fff}
@@ -47,7 +47,7 @@ math{font-size:1.2em}
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.kc{background:#f7f9fd;border:1px solid var(--line);border-radius:10px;padding:10px 14px}.kc b{display:block;font-size:26px;color:var(--acc)}.kc small{color:var(--mut)}
 table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;border-bottom:1px solid var(--line);text-align:left}th{background:#f7f9fd;color:var(--mut)}
 #typelist label.rad{font-weight:400;font-size:15px}#typelist .all{font-size:13px;margin:0 0 6px}#typelist .all span{color:var(--acc);cursor:pointer;text-decoration:underline;margin-right:12px}#typelist .cnt{color:var(--mut);margin-left:4px}#typelist hr{border:0;border-top:1px solid var(--line);margin:8px 0}
-#typeln{display:inline-block;background:#e8f0fc;color:#1f4e8c;border-radius:12px;padding:2px 12px;font-size:13px;margin-bottom:10px}
+#typeln{display:inline-block;background:var(--accl);color:var(--acc);border-radius:12px;padding:2px 12px;font-size:13px;margin-bottom:10px}
 .ngrp{width:100%;font-size:12px;color:var(--mut);margin:8px 0 2px;font-weight:600}.ngrp:first-child{margin-top:0}
 #palbtn{display:none;width:100%;text-align:left}
 @media(max-width:800px){.wrap{grid-template-columns:minmax(0,1fr);padding:0 8px;margin:8px auto}.side{position:static;order:-1;max-height:none;padding:8px}#palh{display:none}#palbtn{display:block;min-height:42px;font-size:15px}#navbox{display:none;margin-top:8px}#navbox.open{display:block}body{font-size:17px}
@@ -62,7 +62,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;b
 .dE,.dM,.dD{font-weight:700;border-radius:10px;padding:1px 8px;font-size:12px;white-space:nowrap}.dE{background:#e3f4e8;color:#1e6b34}.dM{background:#fff1d6;color:#8a5a00}.dD{background:#fde3e0;color:#a3241b}
 .acts .lnk{display:inline-block;padding:6px 14px 6px 0}.actr td{padding-top:0;border-top:0}.lnk.del{color:#b3261e}.actrow{display:flex;gap:10px;flex-wrap:wrap}
 </style></head><body>
-<div id="start" class="panel"><a href="index.html" style="font-size:14px;color:#1f4e8c;text-decoration:none">&lsaquo; All chapters</a><h2>Limits</h2><div style="color:var(--mut)">JEE Main previous-year questions &middot; Maths &middot; timed practice</div>
+<div id="start" class="panel"><a href="index.html" style="font-size:14px;color:var(--acc);text-decoration:none">&lsaquo; All chapters</a><h2>Limits</h2><div style="color:var(--mut)">JEE Main previous-year questions &middot; Maths &middot; timed practice</div>
 <div class="banner" style="border-color:#2e9b4f;background:#f2fbf5"><b>Study material</b> (do these before the practice)<br><a href="materials/Limits%20Question%20Types.html">1. Question Types</a> &nbsp;&middot;&nbsp; <a href="materials/Limits%20Type%20Notes.html">2. Type Notes</a></div><div id="pend" class="banner" hidden></div>
 <label>Which question types do you want to practise?</label><div class="tbox" id="typelist"></div>
 <label>Practice time</label>
