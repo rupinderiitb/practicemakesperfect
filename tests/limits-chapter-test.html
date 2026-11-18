@@ -171,7 +171,8 @@ function modal(title,msg,btns,warn){$('mt').textContent=title;$('mp').textConten
  $('metaln').textContent='Enter your details and the test code to begin.';
  if(CFG.identity==='id'){$('f_name').hidden=true;$('f_batch').hidden=true;$('f_sid').hidden=false;$('f_sid').querySelector('label').textContent='Your student ID (given by your teacher)'}
  $('rules').innerHTML='<li>The paper opens after you enter a valid code. The clock starts at that moment.</li><li><b>After the test opens, turn off Wi-Fi and mobile data</b> (airplane mode is fine). Turn them on again only to submit.</li><li>Do not leave this screen. Switching apps or tabs, or using any other window, gives a warning. <b>The 3rd warning submits your test automatically.</b></li><li>On a phone, set the screen timeout to the longest setting so the screen does not lock.</li><li>On a laptop the test runs in full screen. Leaving full screen also gives a warning.</li><li>Answers are saved on this device as you go. If the page reloads, open it again and press Resume.</li>';
- var sv=LS.get();if(sv&&sv.token&&!sv.done){$('resumebox').hidden=false;$('name').value=sv.name||'';$('batch').value=sv.batch||'';$('sid').value=sv.sid||'';$('code').value=sv.code||''}
+ (function(){var h=(location.hash||'').replace(/^#/,'').split('&');h.forEach(function(p){var kv=p.split('=');if(kv[0]==='code'&&$('code'))$('code').value=decodeURIComponent(kv[1]||'');if(kv[0]==='sid'&&$('sid'))$('sid').value=decodeURIComponent(kv[1]||'')})})();
+var sv=LS.get();if(sv&&sv.token&&!sv.done){$('resumebox').hidden=false;$('name').value=sv.name||'';$('batch').value=sv.batch||'';$('sid').value=sv.sid||'';$('code').value=sv.code||''}
  if(sv&&sv.pend){showWait(sv)}
 })();
 FS=!!(document.documentElement.requestFullscreen)&&matchMedia('(pointer:fine)').matches;

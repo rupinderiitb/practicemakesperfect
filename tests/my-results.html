@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>My Results</title>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>My Tests</title>
 <style>
 :root{--ink:#1d2433;--mut:#5a6478;--line:#dfe4ee;--bg:#eef1f7;--acc:#1f4e8c;--accl:#e8f0fc;--accb:#9bb4de;--hdr:#1f4e8c;--hdrtx:#fff;--tmbg:rgba(255,255,255,.15);--hdrline:transparent}
 *{box-sizing:border-box}body{margin:0;font-family:Calibri,"Segoe UI",Arial,sans-serif;font-size:18px;color:var(--ink);background:var(--bg);line-height:1.55}
@@ -73,17 +73,17 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;b
 
 .panel .f{margin:10px 0}.panel .f input{width:100%;padding:10px 12px;font-size:17px;border:2px solid #b9c3d6;border-radius:8px}.panel .f label{margin:0 0 3px}
 .err{color:#b3261e;font-weight:600;margin:8px 0;min-height:1.2em}.big{width:100%;min-height:48px;font-size:17px}
-.rl{width:100%;border-collapse:collapse;margin:10px 0}.rl td,.rl th{border-bottom:1px solid #d5dbe8;padding:8px 6px;text-align:left;font-size:15px}.rl .btn{min-height:36px;font-size:14px}
+.rl{width:100%;border-collapse:collapse;margin:10px 0}.rl td,.rl th{border-bottom:1px solid #d5dbe8;padding:8px 6px;text-align:left;font-size:15px}.rl .btn{min-height:36px;font-size:14px}.rl tr.grey td{color:#8a93a6}.rl tr.grey td small{color:#8a93a6}.tag{display:inline-block;padding:2px 8px;border-radius:10px;background:#e8edf7;font-size:12px;font-weight:600}
 #pdfbox{display:none}
 @media print{body>*{display:none!important}body>#pdfbox{display:block!important;padding:10px;font-size:13px}#pdfbox table{width:100%}}
 </style></head><body>
 <div id="login" class="panel">
-<h2>My Results</h2><div style="color:var(--mut);margin-bottom:6px">See your past tests. After a test window closes you can download your full paper with the correct answers, right/wrong marking and your analysis.</div>
+<h2>My Tests</h2><div style="color:var(--mut);margin-bottom:6px">Sign in to see your upcoming tests, start a test that is open, and see your past results. After a test window closes you can download your full paper with the correct answers, right/wrong marking and your analysis.</div>
 <div class="f"><label for="sid">Your student ID</label><input id="sid" autocomplete="off"></div>
 <div class="f"><label for="pin">Your PIN or password (first PIN is given by your teacher)</label><input id="pin" type="password" autocomplete="off"></div>
 <div class="err" id="lerr"></div><button class="btn pri big" id="go">Show my results</button>
 </div>
-<div id="list" class="panel" hidden style="max-width:900px"><h2 id="who"></h2><div id="lnote" class="err"></div><div id="tbl"></div><div style="margin:12px 0"><button class="btn" id="chg">Change my PIN / password</button>
+<div id="list" class="panel" hidden style="max-width:900px"><h2 id="who"></h2><div id="lnote" class="err"></div><h3>Tests for you</h3><div id="up"></div><h3>Past tests</h3><div id="tbl"></div><div style="margin:12px 0"><button class="btn" id="chg">Change my PIN / password</button>
 <div id="chgbox" hidden style="margin-top:8px"><div class="f"><label for="np">New PIN or password (4 to 40 characters)</label><input id="np" type="password" autocomplete="new-password"></div>
 <div class="f"><label for="np2">Type it again</label><input id="np2" type="password" autocomplete="new-password"></div>
 <button class="btn pri" id="chgok">Save new password</button> <span class="err" id="cmsg"></span></div></div>
@@ -135,6 +135,19 @@ function load(){$('lerr').textContent='Checking...';$('go').disabled=true;
   if(!r.ok){$('lerr').textContent=r.message||'Could not sign in.';return}
   CRED={sid:$('sid').value.trim(),pin:$('pin').value.trim()};$('lerr').textContent='';$('login').hidden=true;$('list').hidden=false;
   $('who').textContent=r.student.name+' · '+r.student.sid+' · '+r.student.batch;
+  var tests=r.tests||[],uh='';
+  var F=function(ms){return ms?new Date(ms).toLocaleString('en-IN',{day:'numeric',month:'short',year:'numeric',hour:'numeric',minute:'2-digit',hour12:true}):'-'};
+  if(!tests.length)uh='<p>No tests are scheduled for your batch right now.</p>';else{
+   uh='<table class="rl"><tr><th>Test</th><th>Type</th><th>Opens</th><th>Closes</th><th>Time</th><th></th></tr>';
+   tests.forEach(function(x){var done=x.used>=x.max,act='';
+    if(x.state==='upcoming')act='<span class="tag">Not open yet</span>';
+    else if(x.state==='closed')act='<span class="tag">Missed</span>';
+    else if(done)act='<span class="tag">Done</span>';
+    else if(x.pageUrl)act='<a class="btn pri" style="text-decoration:none;display:inline-block;padding:7px 12px" href="'+esc(x.pageUrl)+'#code='+encodeURIComponent(x.code)+'&sid='+encodeURIComponent(CRED.sid)+'" target="_blank" rel="noopener">Start</a>'+(x.used?'<br><small>Attempt '+(x.used+1)+' of '+x.max+'</small>':'');
+    else act='<span class="tag">Open</span><br><small>Code: '+esc(x.code)+'</small>';
+    uh+='<tr'+(x.state==='open'&&!done?'':' class="grey"')+'><td>'+esc(x.title)+(x.series?'<br><small>'+esc(x.series)+'</small>':'')+'</td><td>'+esc(x.kind||'')+'</td><td>'+F(x.opens)+'</td><td>'+F(x.closes)+'</td><td>'+(x.durationMin?esc(x.durationMin)+' min':'')+'</td><td>'+act+'</td></tr>'});
+   uh+='</table>'}
+  $('up').innerHTML=uh;
   if(!r.attempts.length){$('tbl').innerHTML='<p>No submitted tests yet.</p>';return}
   var h='<table class="rl"><tr><th>Date</th><th>Test</th><th>Attempt</th><th>Score</th><th></th></tr>';
   r.attempts.forEach(function(a,i){h+='<tr><td>'+esc(a.date)+'</td><td>'+esc(a.title)+(a.series?'<br><small>'+esc(a.series)+'</small>':'')+'</td><td>'+esc(a.attemptNo)+'</td><td>'+esc(a.score)+' / '+esc(a.max)+'</td><td>'+(a.released?'<button class="btn pri dl" data-id="'+esc(a.attemptId)+'">Download full paper (PDF)</button>':'<small>Answers open about '+(a.releaseAt>1e11?esc(new Date(a.releaseAt).toLocaleString()):'later')+'</small>')+'</td></tr>'});
