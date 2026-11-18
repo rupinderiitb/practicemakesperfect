@@ -107,6 +107,7 @@ body[data-theme="mixed"]{--acc:#3b3f58;--accl:#eceef6;--accb:#aab0cc;--hdr:#3b3f
 .stag{display:inline-block;font-size:11.5px;font-weight:700;border-radius:10px;padding:1px 8px;margin-bottom:3px}.stag.th-physics{background:#205c29;color:#fff}.stag.th-chemistry{background:#faf7ec;color:#205c29;border:1px solid #abae27}.stag.th-maths{background:#1f4e8c;color:#fff}.stag.th-mixed{background:#3b3f58;color:#fff}
 .hello{background:linear-gradient(90deg,var(--accl),#fff);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:0 0 12px;font-size:15.5px}.hello b{color:var(--acc)}.hello .nx{display:block;color:var(--mut);font-size:14px;margin-top:2px}
 .vs{margin-top:5px;min-width:130px}.vsb{position:relative;height:10px;background:#e4e8f0;border-radius:5px}.vsb i{display:block;height:100%;border-radius:5px;background:#1f4e8c}.vsb u{position:absolute;top:-3px;width:3px;height:16px;background:#1d2433;border-radius:2px;text-decoration:none}.vs small{display:block;margin-top:3px;color:var(--mut);font-size:12px}
+@media(max-width:520px){.vs{min-width:70px}.rl td,.rl th{padding:8px 3px;font-size:13.5px}.rl .btn{white-space:normal;padding:6px 8px;font-size:13px}}
 .rl tr.th-physics .vsb i{background:#205c29}.rl tr.th-chemistry .vsb i{background:#abae27}
 .cards .kc.r{border-top:4px solid #1e8a3c}.cards .kc.w{border-top:4px solid #d9402f}.cards .kc.p{border-top:4px solid #e07b00}.cards .kc.u{border-top:4px solid #aeb6c5}
 td.rR{color:#1e8a3c;font-weight:700}td.rW{color:#d9402f;font-weight:700}td.rP{color:#e07b00;font-weight:700}td.rU{color:#777}
@@ -215,6 +216,7 @@ var RV=(function(){
 
 var CFG={api:"https://script.google.com/macros/s/AKfycbzyt9dvteWN2hU9pdZjJOoYNBK-TZ_roNLtr6NHBNSciIP86AO40FtKPInLExj2FaCajA/exec",maxStrikes:3,pingEvery:45000,pingFirst:60000,blurMs:2000};
 var $=function(i){return document.getElementById(i)};
+var SS={get:function(){try{return JSON.parse(sessionStorage.getItem('pyqt_c')||'null')}catch(e){return null}},set:function(v){try{sessionStorage.setItem('pyqt_c',JSON.stringify(v))}catch(e){}},del:function(){try{sessionStorage.removeItem('pyqt_c')}catch(e){}}};
 var S=null,away=null,timers={},wake=null,FS=false,fsOn=false,CRED=null,CUR=null;
 var LS={get:function(){try{return JSON.parse(localStorage.getItem('pyqt_u')||'null')}catch(e){return null}},set:function(v){try{localStorage.setItem('pyqt_u',JSON.stringify(v));return true}catch(e){return false}},del:function(){try{localStorage.removeItem('pyqt_u')}catch(e){}}};
 function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -227,12 +229,13 @@ var F=function(ms){return ms?new Date(ms).toLocaleString('en-IN',{day:'numeric',
 
 /* ---------- sign in and Tests list ---------- */
 (function(){var sv=LS.get();if(sv&&sv.token&&!sv.done){$('resumebox').hidden=false;$('resumeinfo').textContent=(sv.title||'')+(sv.name?' - '+sv.name:'');$('sid').value=sv.sid||''}
- if(sv&&sv.pend){showWait(sv)}})();
+ if(sv&&sv.pend){showWait(sv)}
+ else if(!(sv&&sv.token&&!sv.done)){var c=SS.get();if(c&&c.sid&&c.pin){$('lerr').textContent='Signing in...';api({a:'myresults',sid:c.sid,pin:c.pin},30000).then(function(r){if(r.ok){CRED={sid:c.sid,pin:c.pin};$('lerr').textContent='';renderList(r)}else{SS.del();$('lerr').textContent=''}},function(){$('lerr').textContent=''})}}})();
 function load(){$('lerr').textContent='Checking...';$('go').disabled=true;
  var sid=$('sid').value.trim(),pin=$('pin').value;
  return api({a:'myresults',sid:sid,pin:pin.trim()},30000).then(function(r){$('go').disabled=false;
   if(!r.ok){$('lerr').textContent=r.message||'Could not sign in.';return}
-  CRED={sid:sid,pin:pin.trim()};$('lerr').textContent='';$('pin').value='';renderList(r)},
+  CRED={sid:sid,pin:pin.trim()};SS.set(CRED);$('lerr').textContent='';$('pin').value='';renderList(r)},
  function(){$('go').disabled=false;$('lerr').textContent='Could not reach the server. Check your internet and try again.'})}
 function vsBar(a){var mx=Number(a.max);if(!(mx>0))return'';var me=Math.max(0,Math.min(100,100*Number(a.score)/mx)),av=a.avgPct;
  return'<div class="vs"><div class="vsb"><i style="width:'+me+'%"></i>'+(av!=null?'<u style="left:'+Math.max(0,Math.min(99,av))+'%" title="Batch average"></u>':'')+'</div><small>You '+Math.round(me)+'%'+(av!=null?' &middot; batch average '+Math.round(av)+'%':'')+'</small></div>'}
@@ -276,10 +279,10 @@ $('chgok').onclick=function(){var a=$('np').value,c=$('np2').value,m=$('cmsg');m
  $('chgok').disabled=true;m.textContent='Saving...';
  api({a:'changepin',sid:CRED.sid,pin:CRED.pin,newpin:a},30000).then(function(r){$('chgok').disabled=false;
   if(!r.ok){m.textContent=r.message||'Could not change it.';return}
-  CRED.pin=a;$('np').value=$('np2').value='';m.textContent='Saved. Use the new one next time you sign in.';m.style.color='green'},
+  CRED.pin=a;SS.set(CRED);$('np').value=$('np2').value='';m.textContent='Saved. Use the new one next time you sign in.';m.style.color='green'},
  function(){$('chgok').disabled=false;m.textContent='Could not reach the server. Try again.'})};
 $('go').onclick=load;$('pin').onkeydown=$('sid').onkeydown=function(e){if(e.key==='Enter')load()};
-$('out').onclick=function(){CRED=null;$('pin').value='';show1('login');$('pdfbox').innerHTML=''};
+$('out').onclick=function(){CRED=null;SS.del();$('pin').value='';show1('login');$('pdfbox').innerHTML=''};
 
 /* ---------- rules screen, then the test starts ---------- */
 function rulesFor(strict,t){var h='<li>The paper opens when you press the Start button below. The clock starts at that moment.</li>';
