@@ -110,7 +110,7 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;b
 <div id="legend"><span><i class="nv"></i>Not visited</span><span><i class="na"></i>Not answered</span><span><i class="an"></i>Answered</span><span><i class="mk"></i>Marked for review</span><span><i class="am"></i>Answered and marked</span></div></div></aside>
 </div></div>
 
-<div id="wait" class="panel" hidden><h2>Your answers are locked</h2><p id="waitmsg"></p><div class="err" id="werr"></div><button class="btn pri big" id="retry">Try to submit again</button><p></p><button class="btn big" id="pdf1">Save my answers as PDF (backup)</button></div>
+<div id="wait" class="panel" hidden><h2>Your answers are locked</h2><p id="waitmsg"></p><div class="err" id="werr"></div><button class="btn pri big" id="retry">Submit my answers</button><p></p><button class="btn big" id="pdf1">Save my answers as PDF (backup)</button></div>
 
 <div id="done" hidden><div class="panel" style="max-width:820px"><h2 id="dtitle">Test submitted</h2><div id="dbody"></div></div></div>
 
@@ -119,6 +119,44 @@ table{border-collapse:collapse;width:100%;font-size:14px}th,td{padding:5px 8px;b
 <div id="pdfbox"></div>
 
 <script>
+/* shared by the test page and the My Results page: builds the full-paper review (PDF) as HTML */
+var RV=(function(){
+ function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+ function fmt(sec){sec=Math.max(0,Math.round(sec||0));var h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),s=sec%60;return(h?h+':'+('0'+m).slice(-2):m)+':'+('0'+s).slice(-2)}
+ var LV={E:'Easy',M:'Medium',D:'Difficult'};
+ var CSS='<style>.rv{font-size:13px}.rv h1{font-size:20px;margin:0 0 4px}.rv h2{font-size:17px;margin:18px 0 6px;border-bottom:2px solid #444;padding-bottom:3px}.rv h3{font-size:15px;margin:12px 0 6px;color:#333}.rv table{border-collapse:collapse;margin:6px 0}.rv td,.rv th{border:1px solid #999;padding:3px 8px;text-align:left}.rv .cards{display:flex;gap:10px;margin:8px 0}.rv .cards div{border:1px solid #999;border-radius:6px;padding:6px 12px;text-align:center}.rv .cards b{display:block;font-size:18px}'
+ +'.rv .rq{border:1px solid #bbb;border-radius:6px;padding:8px 10px;margin:8px 0;break-inside:avoid-page;page-break-inside:avoid}.rv .rqh{font-weight:bold;margin-bottom:4px}.rv .rqr{margin-top:6px;padding-top:4px;border-top:1px dashed #aaa}'
+ +'.rv .o.mysel{outline:2px solid #1a56c8;outline-offset:-2px}.rv .o.ok-ans{background:#dff3e3}.rv .good{color:#0b7a2b;font-weight:bold}.rv .bad{color:#b3261e;font-weight:bold}.rv .na{color:#666;font-weight:bold}</style>';
+ function abcTable(o){function row(n,a){return'<tr><td>'+n+'</td><td>'+a[0]+' − '+a[1]+' − '+a[2]+'</td></tr>'}return'<table><tr><th>Level</th><th>attempted − correct − in the paper</th></tr>'+row('Easy',o.E)+row('Medium',o.M)+row('Difficult',o.D)+'</table>'}
+ function aggTable(title,arr){if(!arr||!arr.length)return'';var t='<h3>'+title+'</h3><table><tr><th>Name</th><th>Questions</th><th>Attempted</th><th>Correct</th><th>Accuracy % (of attempted)</th><th>Avg time</th></tr>';
+  arr.forEach(function(x){t+='<tr><td>'+esc(x.name)+'</td><td>'+x.q+'</td><td>'+x.attempted+'</td><td>'+x.correct+'</td><td>'+(x.attempted?Math.round(1000*x.correct/x.attempted)/10:'—')+'</td><td>'+fmt(x.avgTime)+'</td></tr>'});return t+'</table>'}
+ function qhtml(q,given,row){var d=document.createElement('div');d.innerHTML=q.html;
+  if(q.kind==='single'){[].forEach.call(d.querySelectorAll('.o'),function(o){var l=o.getAttribute('data-l');o.classList.remove('sel');if(given===l)o.classList.add('mysel');if(row&&row.key&&row.key.split(' or ').indexOf(l)>=0)o.classList.add('ok-ans')})}
+  else{[].forEach.call(d.querySelectorAll('input.num'),function(i){var b=document.createElement('b');b.textContent='[ '+(given||'—')+' ]';i.parentNode.replaceChild(b,i)})}
+  return d.innerHTML}
+ function build(d){
+  var m=d.meta||{},P=d.paper,rows={};(d.rows||[]).forEach(function(r){rows[r.id]=r});var full=!!d.rows,qs={};P.questions.forEach(function(q){qs[q.id]=q});
+  var h=CSS+'<div class="rv"><h1>'+esc(d.title||P.title)+(full?' — full paper with answers and analysis':' — my full paper')+'</h1><p>'+esc(d.who.name)+' · '+esc(d.who.sid||'')+' · '+esc(d.who.batch||'')+(m.code?' · code '+esc(m.code):'')+(m.attemptNo?' · attempt '+esc(m.attemptNo):'')+(m.date?' · '+esc(m.date):'')+'</p>';
+  if(m.score!=null)h+='<div class="cards"><div><b>'+m.score+' / '+m.max+'</b>Score (+4 / −1)</div><div><b>'+m.correct+'</b>Correct</div><div><b>'+m.wrong+'</b>Wrong</div><div><b>'+m.unanswered+'</b>Not answered</div></div>';
+  if(d.abc){h+='<h3>How well did you choose your questions? (attempted − correct − in the paper)</h3>'+abcTable(d.abc.overall);var subs=Object.keys(d.abc.subjects||{});if(subs.length>1)subs.forEach(function(s){h+='<h3>'+esc(s)+'</h3>'+abcTable(d.abc.subjects[s])})}
+  if(m.timeUsedSec!=null)h+='<p>Time used: <b>'+fmt(m.timeUsedSec)+'</b>'+(m.durationMin?' of '+m.durationMin+' min':'')+' · Questions over the expected time: <b>'+(m.overtime==null?'—':m.overtime)+'</b> · Answer changes: <b>'+(m.changes==null?'—':m.changes)+'</b> · Warnings: <b>'+(m.strikes==null?'—':m.strikes)+'</b>'+(m.late==='Y'||m.late===true?' · <span class="bad">Late</span>':'')+'</p>';
+  if(full){h+=aggTable('Accuracy by question type (weakest first)',d.byType);if((d.byChapter||[]).length>1)h+=aggTable('Accuracy by chapter (weakest first)',d.byChapter)}
+  else h+='<p><i>The correct answers and the right/wrong marking are available from the My Results page after the test window closes.</i></p>';
+  var n=0,lastSubj=null;
+  P.sections.forEach(function(sec,si){
+   var subj=(sec.qids.length&&rows[sec.qids[0]]&&rows[sec.qids[0]].subject)||sec.subject||P.subject||'';
+   if(subj!==lastSubj){h+='<h2>'+esc(subj)+'</h2>';lastSubj=subj}
+   h+='<h3>'+esc(sec.name)+'</h3>';
+   sec.qids.forEach(function(id){n++;var q=qs[id],r=rows[id],g=r?r.given:(d.given||{})[id]||'';
+    h+='<div class="rq"><div class="rqh">Q'+n+(r?' · '+(LV[r.level]||'')+' · '+esc(r.type):'')+'</div>'+qhtml(q,g,r);
+    if(r){var res=r.result==='R'?'<span class="good">✔ Correct</span>':r.result==='W'?'<span class="bad">✘ Wrong</span>':r.result==='X'?'<span class="na">Dropped (not counted)</span>':'<span class="na">Not answered</span>';
+     h+='<div class="rqr">Your answer: <b>'+esc(g||'—')+'</b> · Correct answer: <b>'+esc(r.key||'—')+'</b> · '+res+' · Time '+fmt(r.time)+' (expected '+fmt(r.exp)+')'+(r.over?' · over time':'')+'</div>'}
+    else h+='<div class="rqr">Your answer: <b>'+esc(g||'—')+'</b></div>';
+    h+='</div>'})});
+  return h+'</div>'}
+ return{build:build,esc:esc,fmt:fmt}
+})();
+
 var CFG={api:"https://script.google.com/macros/s/AKfycbzyt9dvteWN2hU9pdZjJOoYNBK-TZ_roNLtr6NHBNSciIP86AO40FtKPInLExj2FaCajA/exec",key:"limits-chapter-test",title:"Limits · Chapter Test",identity:"id",maxStrikes:3,pingEvery:45000,pingFirst:60000,blurMs:2000};
 var $=function(i){return document.getElementById(i)};
 var S=null,away=null,timers={},wake=null,FS=false,fsOn=false;
@@ -168,6 +206,7 @@ function beginExam(d,r){
  if(S.cur>=S.order.length)S.cur=0;
  $('start').hidden=true;$('exam').hidden=false;$('ttl').textContent=P.title;document.title=P.title;
  buildSecs();buildNav();show(S.cur);save(true);
+ if(r.stopMode==='hard'&&!r.resume&&r.remainingSec!=null&&r.durationSec-r.remainingSec>60)setTimeout(function(){modal('This test closes at '+new Date(r.closesAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),'You started late, so you have '+fmt(r.remainingSec)+' instead of the full '+fmt(r.durationSec)+'. The clock is running.',[{t:'Start',pri:1}])},300);
  startTimers();acquireWake();
  if(S.strikes.length>=CFG.maxStrikes){submitNow('strikes')}}
 function save(withPaper){if(!S)return;var o={token:S.token,code:S.code,name:S.name,batch:S.batch,sid:S.sid,durationSec:S.durationSec,attemptNo:S.attemptNo,maxAttempts:S.maxAttempts,endWall:S.endWall,answers:S.answers,times:S.times,changes:S.changes,marked:S.marked,visited:S.visited,strikes:S.strikes,wifiPass:S.wifiPass||0,onlineEvents:S.onlineEvents,pastes:S.pastes,cur:S.cur,done:false};
@@ -246,7 +285,7 @@ function send(p,sv,quiet){if(sending)return;sending=true;if(!quiet)$('werr').tex
  api(p,30000).then(function(r){sending=false;
   if(r&&r.ok){clearInterval(timers.r);var s2=LS.get()||{};LS.set({token:s2.token,code:s2.code,name:s2.name,batch:s2.batch,sid:s2.sid,done:true,result:r,title:s2.title});showResult(r,sv)}
   else{$('werr').textContent=(r&&r.message)||'The server could not accept the answers. Tell your teacher.'}},
-  function(){sending=false;$('werr').textContent='No internet yet. Turn on Wi-Fi or mobile data and press the button.'})}
+  function(){sending=false;$('werr').textContent=''})}
 
 /* ---------- result ---------- */
 function abcRow(n,a){return'<tr><td>'+n+'</td><td>'+a[0]+' − '+a[1]+' − '+a[2]+'</td></tr>'}
@@ -258,10 +297,13 @@ function showResult(r,sv){$('wait').hidden=true;$('done').hidden=false;var all=r
  h+='<p>Time used: <b>'+fmt(r.timeUsedSec)+'</b> &middot; Questions where you went over the expected time: <b>'+r.overtime+'</b> &middot; Answer changes: <b>'+r.changes+'</b> &middot; Warnings: <b>'+r.strikes+'</b></p>';
  if(r.late)h+='<p class="err">Your answers arrived after the time limit, so your teacher has been told.</p>';
  h+='<p>Attempt '+r.attemptNo+' of '+r.maxAttempts+'. '+(r.attemptsLeft>0?'You can attempt this test '+r.attemptsLeft+' more time. Open the test page again and enter the code.':'You have used all your attempts.')+'</p>';
- h+='<p class="tnote">The correct answers are shown after the test window closes'+(r.releaseAt?' (from about '+new Date(r.releaseAt).toLocaleString()+')':'')+'.</p>';
- h+='<button class="btn" id="seeans">See the correct answers</button> <button class="btn" id="pdf2">Save this result as PDF</button><div id="ansbox"></div>';
+ h+='<p class="tnote">'+(r.releaseAt===1?'You can see the correct answers now.':'The correct answers are shown after the test window closes'+(r.releaseAt?' (from about '+new Date(r.releaseAt).toLocaleString()+')':'')+'. After that, open the My Results page to download your full paper with the right and wrong marking and your analysis.')+'</p>';
+ h+='<button class="btn" id="seeans">See the correct answers</button> <button class="btn" id="pdf2">Save this result as PDF</button> <button class="btn" id="pdf3">Download my full paper (PDF)</button><div id="ansbox"></div>';
  $('dbody').innerHTML=h;
  $('pdf2').onclick=function(){$('pdfbox').innerHTML='<h2>'+esc(sv.title||CFG.title)+'</h2><p>'+esc(sv.name)+' · '+esc(sv.batch||sv.sid||'')+'</p>'+$('dbody').innerHTML.replace(/<button[\s\S]*?<\/button>/g,'');window.print()};
+ $('pdf3').onclick=function(){var P=(sv&&sv.paper)||(S&&S.paper);if(!P){modal('Not available','The paper is no longer on this device. Use the My Results page after the test window closes.',[{t:'OK',pri:1}]);return}
+  var given=(sv&&sv.pend&&sv.pend.answers)||(S&&S.answers)||{};
+  $('pdfbox').innerHTML=RV.build({title:P.title,who:{name:sv.name,sid:sv.sid,batch:sv.batch},meta:{code:sv.code,attemptNo:r.attemptNo,score:r.score,max:r.max,correct:r.correct,wrong:r.wrong,unanswered:r.unanswered,timeUsedSec:r.timeUsedSec,durationMin:Math.round(((S&&S.durationSec)||sv.durationSec||0)/60)||undefined,overtime:r.overtime,changes:r.changes,strikes:r.strikes,late:r.late},abc:r.abc,paper:P,given:given});window.print()};
  $('seeans').onclick=function(){$('ansbox').innerHTML='Checking...';api({a:'results',code:sv.code,name:sv.name,batch:sv.batch,sid:sv.sid},30000).then(function(x){
   if(!x.ok){$('ansbox').innerHTML='<p class="err">'+esc(x.message||'Not available yet.')+'</p>';return}
   var t='';Object.keys(x.attempts).forEach(function(n){t+='<h3>Attempt '+n+'</h3><table><tr><th>Q</th><th>Your answer</th><th>Correct answer</th><th>Result</th><th>Time</th></tr>';x.attempts[n].forEach(function(q,i){t+='<tr><td>'+(i+1)+'</td><td>'+esc(q.given||'—')+'</td><td>'+esc(q.key)+'</td><td>'+(q.result==='R'?'Correct':q.result==='W'?'Wrong':q.result==='X'?'Dropped (not counted)':'Not answered')+'</td><td>'+fmt(q.time)+' / '+fmt(q.exp)+'</td></tr>'});t+='</table>'});$('ansbox').innerHTML=t},function(){$('ansbox').innerHTML='<p class="err">Could not reach the server. Try again with internet on.</p>'})}}
