@@ -188,6 +188,28 @@ var RV=(function(){
    [].forEach.call(d.querySelectorAll('.o'),function(o){var l=o.getAttribute('data-l');o.classList.remove('sel');if(mine.indexOf(l)>=0)o.classList.add('mysel');if(keys.indexOf(l)>=0)o.classList.add('ok-ans')})}
   else{[].forEach.call(d.querySelectorAll('input.num'),function(i){var b=document.createElement('b');b.textContent='[ '+(given||'—')+' ]';i.parentNode.replaceChild(b,i)})}
   return d.innerHTML}
+
+ function lvt(x){return LV[x]||x}
+ function qlist(a,withRes){return a.map(function(x){return'Q'+x.q+' ('+lvt(x.level)+', '+fmt(x.time)+(x.exp?' against '+fmt(x.exp)+' expected':'')+(withRes?(x.result==='R'?', right':x.result==='W'?', wrong':', not answered'):'')+')'}).join('; ')}
+ function analysisHtml(a,m){if(!a)return'';var f=a.first,T=a.time||{},E=a.errors||{},h='<h2>Analysis of your attempt</h2>';
+  if(m&&m.batchPct!=null)h+='<p>Batch average for this test: <b>'+m.batchPct+'%</b> ('+m.batchN+' students, first attempts). You scored <b>'+(m.max?Math.round(1000*m.score/m.max)/10:'—')+'%</b>, ahead of <b>'+m.percentile+'%</b> of the batch.</p>';
+  if(f&&f.recorded){var N=f.n;
+   h+='<h3>Your first '+N+' answers: the key to the paper</h3>';
+   h+='<table><tr><th></th><th>Easy</th><th>Medium</th><th>Difficult</th></tr><tr><td>Questions of this level in the paper</td><td>'+f.easyInPaper+'</td><td>'+f.medInPaper+'</td><td>'+f.diffInPaper+'</td></tr>'
+    +'<tr><td>Chosen among your first '+f.answeredInWindow+' answers</td><td>'+f.easyChosen+'</td><td>'+f.medChosen+'</td><td>'+f.diffChosen+'</td></tr>'
+    +'<tr><td>Of those, correct</td><td>'+f.easyRight+'</td><td>'+f.medRight+'</td><td>'+f.diffRight+'</td></tr></table>';
+   h+='<p>You chose <b>'+f.easyChosen+' of the '+f.easyInPaper+'</b> easy questions in your first '+f.answeredInWindow+' answers and got <b>'+f.easyRight+'</b> of them right. <b>'+f.easyLeft+'</b> easy questions were left for later or not answered: each one is marks you could collect early and safely.</p>';
+   if(f.short)h+='<p><i>You answered fewer than '+N+' questions in all, so this covers everything you answered.</i></p>';
+   h+='<p>'+(f.approx?'You used ':'Your first '+f.answeredInWindow+' answers were marked within ')+'<b>'+fmt(f.windowSec)+'</b> of the clock'+(f.approx?'':'; you still had <b>'+fmt(f.leftSec)+'</b> left')+'. Time spent on the '+f.answeredInWindow+' questions you chose: <b>'+fmt(f.timeOnFirstSec)+'</b>. After that you answered <b>'+f.answeredAfter+'</b> more question'+(f.answeredAfter===1?'':'s')+'.</p>';
+   h+='<table><tr><th></th><th>Correct</th><th>Wrong</th><th>Score</th></tr><tr><td>First '+f.answeredInWindow+' answers</td><td>'+f.correctFirst+'</td><td>'+f.wrongFirst+'</td><td><b>'+f.scoreFirst+'</b></td></tr><tr><td>Everything after</td><td>'+f.correctAfter+'</td><td>'+f.wrongAfter+'</td><td><b>'+f.scoreAfter+'</b></td></tr></table>';
+   h+='<p><b>Medium and difficult questions you got stuck on</b> (more than 1.5 times the expected time, within your first '+N+'): '+(f.stuck.length?qlist(f.stuck,true):'none. Good selection.')+'</p>';
+   if(f.slowEasy.length)h+='<p><b>Easy questions that took far longer than expected:</b> '+qlist(f.slowEasy,true)+'</p>';
+   h+='<p><b>Time spent on questions you did not mark an answer for</b> (1½ minutes or more, before your '+N+'th answer): '+(f.sinks.length?qlist(f.sinks.map(function(x){return{q:x.q,level:x.level,time:x.time,exp:0}}),false)+'. Total <b>'+fmt(f.sinkSec)+'</b>. Moving on earlier would have bought time for the easy questions.':'none.')+'</p>'}
+  else h+='<p><i>The order in which you answered was not recorded for this attempt, so the first-30 analysis is not available. Tests taken after this update have it.</i></p>';
+  var lv=T.lvl||{},av=function(k){return lv[k]&&lv[k].n?fmt(lv[k].sec/lv[k].n):'—'};
+  h+='<h3>Time management</h3><p>Average time per question: Easy <b>'+av('E')+'</b> · Medium <b>'+av('M')+'</b> · Difficult <b>'+av('D')+'</b>.<br>Answered in under half the expected time and wrong (rushed): <b>'+(T.fastWrong||0)+'</b> · More than 1.5 times the expected time and right (slow): <b>'+(T.slowRight||0)+'</b> · More than 1.5 times the expected time and not right (time lost): <b>'+(T.slowNotRight||0)+'</b>.</p>';
+  h+='<h3>Where the wrong answers came from</h3><p>Wrong answers that look careless (an easy question, or answered in under half the expected time): <b>'+(E.careless||0)+'</b> · look like gaps in the concept (medium/difficult and a full-length try): <b>'+(E.concept||0)+'</b> · unclear: <b>'+(E.unclear||0)+'</b>. This is a guide from the level and the time, not a verdict.<br>Answers you changed: <b>'+(E.changedRight||0)+'</b> ended right, <b>'+(E.changedWrong||0)+'</b> ended wrong · Marked for review: <b>'+(E.markedRight||0)+'</b> right, <b>'+(E.markedWrong||0)+'</b> wrong.</p>';
+  return h}
  function build(d){
   var m=d.meta||{},P=d.paper,rows={};(d.rows||[]).forEach(function(r){rows[r.id]=r});var full=!!d.rows,qs={};P.questions.forEach(function(q){qs[q.id]=q});
   var h=CSS+MAPCSS+'<div class="rv"><h1>'+esc(d.title||P.title)+(full?' — full paper with answers and analysis':' — my full paper')+'</h1><p>'+esc(d.who.name)+' · '+esc(d.who.sid||'')+' · '+esc(d.who.batch||'')+(m.code?' · code '+esc(m.code):'')+(m.attemptNo?' · attempt '+esc(m.attemptNo):'')+(m.date?' · '+esc(m.date):'')+'</p>';
@@ -198,6 +220,7 @@ var RV=(function(){
   h+='<h3>Question map</h3>'+qmap(P,st);
   if(d.abc){h+='<h3>How well did you choose your questions? (attempted − correct − in the paper)</h3>'+abcTable(d.abc.overall);var subs=Object.keys(d.abc.subjects||{});if(subs.length>1)subs.forEach(function(s){h+='<h3>'+esc(s)+'</h3>'+abcTable(d.abc.subjects[s])})}
   if(m.timeUsedSec!=null)h+='<p>Time used: <b>'+fmt(m.timeUsedSec)+'</b>'+(m.durationMin?' of '+m.durationMin+' min':'')+' · Questions over the expected time: <b>'+(m.overtime==null?'—':m.overtime)+'</b> · Answer changes: <b>'+(m.changes==null?'—':m.changes)+'</b> · Warnings: <b>'+(m.strikes==null?'—':m.strikes)+'</b>'+(m.late==='Y'||m.late===true?' · <span class="bad">Late</span>':'')+'</p>';
+  if(full&&m.analysis)h+=analysisHtml(m.analysis,m);
   if(full){h+=aggTable('Accuracy by question type (weakest first)',d.byType);if((d.byChapter||[]).length>1)h+=aggTable('Accuracy by chapter (weakest first)',d.byChapter)}
   else h+='<p><i>The correct answers and the right/wrong marking are available from the My Results page after the test window closes.</i></p>';
   var n=0,lastSubj=null,shown={};
@@ -326,7 +349,7 @@ function themeOfSec(sec){var g=String(sec&&sec.group||'').toLowerCase();return G
 function beginExam(r,code){
  var sv=LS.get(),same=sv&&sv.token===r.token,P=r.paper,st=r.student||{};
  S={token:r.token,code:code,name:st.name,batch:st.batch,sid:st.sid,paper:P,title:P.title,theme:r.theme||'maths',strict:r.strictness!=='light',durationSec:r.durationSec,attemptNo:r.attemptNo,maxAttempts:r.maxAttempts,
-  answers:same?sv.answers||{}:{},times:same?sv.times||{}:{},changes:same?sv.changes||{}:{},marked:same?sv.marked||{}:{},visited:same?sv.visited||{}:{},
+  answers:same?sv.answers||{}:{},times:same?sv.times||{}:{},changes:same?sv.changes||{}:{},marked:same?sv.marked||{}:{},visited:same?sv.visited||{}:{},log:same&&sv.log?sv.log:{seq:[],at:{},snap:null,snapAt:0},firstN:r.firstN||30,
   strikes:same?sv.strikes||[]:[],wifiPass:same?sv.wifiPass||0:0,onlineEvents:same?sv.onlineEvents||0:0,pastes:same?sv.pastes||0:0,cur:same?sv.cur||0:0,final:false,qs:{},order:[],secOf:{},sdata:{}};
  var rem=r.remainingSec;
  if(rem==null){S.endWall=sv.endWall}else{S.endWall=Date.now()+rem*1000}
@@ -340,7 +363,8 @@ function beginExam(r,code){
  if(r.stopMode==='hard'&&!r.resume&&r.remainingSec!=null&&r.durationSec-r.remainingSec>60)setTimeout(function(){modal('This test closes at '+new Date(r.closesAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),'You started late, so you have '+fmt(r.remainingSec)+' instead of the full '+fmt(r.durationSec)+'. The clock is running.',[{t:'Start',pri:1}])},300);
  startTimers();acquireWake();
  if(S.strict&&S.strikes.length>=CFG.maxStrikes){submitNow('strikes')}}
-function save(withPaper){if(!S)return;var o={token:S.token,code:S.code,name:S.name,batch:S.batch,sid:S.sid,title:S.title,theme:S.theme,strict:S.strict,durationSec:S.durationSec,attemptNo:S.attemptNo,maxAttempts:S.maxAttempts,endWall:S.endWall,answers:S.answers,times:S.times,changes:S.changes,marked:S.marked,visited:S.visited,strikes:S.strikes,wifiPass:S.wifiPass||0,onlineEvents:S.onlineEvents,pastes:S.pastes,cur:S.cur,done:false};
+function trackOrder(){if(!S||S.final||!S.log||S.endWall==null)return;var L=S.log,el=Math.max(0,Math.round(S.durationSec-rem()));S.order.forEach(function(id){if((S.answers[id]||'')!==''&&L.at[id]===undefined){L.at[id]=el;L.seq.push(id)}});if(!L.snap&&L.seq.length>=S.firstN){var t={};Object.keys(S.times).forEach(function(k){t[k]=S.times[k]});var cid=S.order[S.cur];if(!away)t[cid]=(t[cid]||0)+(performance.now()-qStart)/1000;L.snap=roundT(t);L.snapAt=el}}
+function save(withPaper){if(!S)return;trackOrder();var o={log:S.log,token:S.token,code:S.code,name:S.name,batch:S.batch,sid:S.sid,title:S.title,theme:S.theme,strict:S.strict,durationSec:S.durationSec,attemptNo:S.attemptNo,maxAttempts:S.maxAttempts,endWall:S.endWall,answers:S.answers,times:S.times,changes:S.changes,marked:S.marked,visited:S.visited,strikes:S.strikes,wifiPass:S.wifiPass||0,onlineEvents:S.onlineEvents,pastes:S.pastes,cur:S.cur,done:false};
  var old=LS.get();if(old&&old.token===S.token&&old.paper&&!withPaper)o.paper=old.paper;else if(withPaper)o.paper=S.paper;if(old&&old.token===S.token&&old.pend)o.pend=old.pend;
  if(!LS.set(o)){delete o.paper;LS.set(o)}}
 function rem(){return Math.min(S.endWall-Date.now(),S.endPerf-performance.now())/1000}
@@ -427,9 +451,9 @@ $('fsbtn').onclick=function(){enterFS().then(function(){$('fsov').hidden=!!docum
 document.addEventListener('keydown',function(ev){if(!S||S.final)return;var c=ev.ctrlKey||ev.metaKey,k=(ev.key||'').toLowerCase();if(c&&['p','s','u','c','x','a'].indexOf(k)>=0)ev.preventDefault();if(c&&k==='v'&&!(ev.target&&ev.target.classList&&ev.target.classList.contains('num')))ev.preventDefault()});
 
 /* ---------- submit ---------- */
-function payload(reason){return{a:'submit',token:S.token,answers:S.answers,times:roundT(S.times),changes:S.changes,marked:S.marked,strikes:S.strikes,onlineEvents:S.onlineEvents,wifiPass:S.wifiPass||0,pastes:S.pastes,auto:reason==='manual'?'':reason}}
+function payload(reason){return{a:'submit',token:S.token,answers:S.answers,times:roundT(S.times),changes:S.changes,marked:S.marked,log:S.log,strikes:S.strikes,onlineEvents:S.onlineEvents,wifiPass:S.wifiPass||0,pastes:S.pastes,auto:reason==='manual'?'':reason}}
 function roundT(t){var o={};Object.keys(t).forEach(function(k){o[k]=Math.round(t[k])});return o}
-function submitNow(reason){if(!S||S.final)return;finishEdit();addTime();S.final=true;clearInterval(timers.t);clearInterval(timers.p);clearTimeout(timers.p0);
+function submitNow(reason){if(!S||S.final)return;finishEdit();addTime();trackOrder();S.final=true;clearInterval(timers.t);clearInterval(timers.p);clearTimeout(timers.p0);
  $('modal').hidden=true;$('fsov').hidden=true;leaveFS();try{if(wake)wake.release()}catch(e){}
  var p=payload(reason),sv=LS.get()||{};sv.pend=p;sv.token=S.token;sv.code=S.code;sv.name=S.name;sv.batch=S.batch;sv.sid=S.sid;sv.title=S.paper.title;sv.order=S.order;sv.reason=reason;sv.paperLite={sections:S.paper.sections};if(!LS.set(sv)){delete sv.paper;LS.set(sv)}
  showWait(sv,reason)}
