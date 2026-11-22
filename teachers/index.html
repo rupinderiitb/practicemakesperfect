@@ -52,7 +52,7 @@ function busy(m){$('app').innerHTML='<p class="sub">'+esc(m||'Loading...')+'</p>
 function fail(r){$('app').innerHTML='<div class="note">'+esc(r.message||'Something went wrong.')+'</div><button onclick="home()">Back to the overview</button>'}
 /* ---------- login ---------- */
 function save(){try{sessionStorage.setItem('pyqt_teacher',JSON.stringify(CRED))}catch(e){}}
-function signIn(tid,pw,quiet){$('lerr').textContent=quiet?'':'Checking...';return api({a:'t_login',tid:tid,pw:pw}).then(function(r){if(!r.ok){if(!quiet)$('lerr').textContent=r.message||'Not accepted.';try{sessionStorage.removeItem('pyqt_teacher')}catch(e){}return}CRED={tid:tid,pw:pw};save();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;$('chg').hidden=false;$('who').textContent=r.teacher.name+' · '+(r.teacher.batches||'no batches');home()})}
+function signIn(tid,pw,quiet){$('lerr').textContent=quiet?'':'Checking...';return api({a:'t_login',tid:tid,pw:pw}).then(function(r){if(!r.ok){if(!quiet)$('lerr').textContent=r.message||'Not accepted.';try{sessionStorage.removeItem('pyqt_teacher')}catch(e){}return}CRED={tid:tid,pw:pw};save();$('login').hidden=true;$('app').hidden=false;$('out').hidden=false;$('chg').hidden=false;$('who').textContent=r.teacher.name+(r.teacher.subjects&&r.teacher.subjects.length?' ('+r.teacher.subjects.join(', ')+')':'')+' · '+(r.teacher.batches||'no batches');home()})}
 $('go').onclick=function(){signIn($('tid').value.trim(),$('pw').value)};$('pw').onkeydown=function(e){if(e.key==='Enter')$('go').click()};
 function cmsg(t,ok){var e=$('cmsg');e.textContent=t;e.style.color=ok?'#1e8a3c':'#d9402f'}
 $('chg').onclick=function(){$('cp0').value=$('cp1').value=$('cp2').value='';cmsg('');$('cbox').hidden=false;$('cp0').focus()};
