@@ -108,6 +108,7 @@ body[data-theme="mixed"]{--acc:#3b3f58;--accl:#eceef6;--accb:#aab0cc;--hdr:#3b3f
 .hello{background:linear-gradient(90deg,var(--accl),#fff);border:1px solid var(--line);border-radius:12px;padding:12px 16px;margin:0 0 12px;font-size:15.5px}.hello b{color:var(--acc)}.hello .nx{display:block;color:var(--mut);font-size:14px;margin-top:2px}
 .vs{margin-top:5px;min-width:130px}.vsb{position:relative;height:10px;background:#e4e8f0;border-radius:5px}.vsb i{display:block;height:100%;border-radius:5px;background:#1f4e8c}.vsb u{position:absolute;top:-3px;width:3px;height:16px;background:#1d2433;border-radius:2px;text-decoration:none}.vs small{display:block;margin-top:3px;color:var(--mut);font-size:12px}
 @media(max-width:520px){.vs{min-width:70px}.rl td,.rl th{padding:8px 3px;font-size:13.5px}.rl .btn{white-space:normal;padding:6px 8px;font-size:13px}}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--mut);border-radius:50%;animation:spn .8s linear infinite;vertical-align:-2px;margin-right:7px}@keyframes spn{to{transform:rotate(360deg)}}.err.busy{color:var(--mut)}.skel{height:46px;border-radius:10px;background:linear-gradient(90deg,#eceff3,#f8f9fb,#eceff3);background-size:200% 100%;animation:shm 1.2s linear infinite;margin:8px 0}@keyframes shm{to{background-position:-200% 0}}
 #login.auto .f,#login.auto #go,#login.auto #resumebox{display:none}#login.auto #lerr{color:var(--mut);font-size:17px;padding:14px 0}
 .rl tr.th-physics .vsb i{background:#205c29}.rl tr.th-chemistry .vsb i{background:#abae27}
 .cards .kc.r{border-top:4px solid #1e8a3c}.cards .kc.w{border-top:4px solid #d9402f}.cards .kc.p{border-top:4px solid #e07b00}.cards .kc.u{border-top:4px solid #aeb6c5}
@@ -231,15 +232,17 @@ var F=function(ms){return ms?new Date(ms).toLocaleString('en-IN',{day:'numeric',
 /* ---------- sign in and Tests list ---------- */
 (function(){var sv=LS.get();if(sv&&sv.token&&!sv.done){$('resumebox').hidden=false;$('resumeinfo').textContent=(sv.title||'')+(sv.name?' - '+sv.name:'');$('sid').value=sv.sid||''}
  if(sv&&sv.pend){showWait(sv)}
- else if(!(sv&&sv.token&&!sv.done)){var c=SS.get();if(c&&c.sid&&c.pin){var L=$('login');L.classList.add('auto');$('lerr').textContent='Signing you in...';api({a:'myresults',sid:c.sid,pin:c.pin},60000).then(function(r){L.classList.remove('auto');if(r.ok){CRED={sid:c.sid,pin:c.pin};$('lerr').textContent='';renderList(r)}else{SS.del();$('lerr').textContent=''}},function(){L.classList.remove('auto');$('lerr').textContent=''})}}})();
+ else if(!(sv&&sv.token&&!sv.done)){var c=SS.get();if(c&&c.sid&&c.pin){var L=$('login'),pre=!!c.name;if(pre){CRED={sid:c.sid,pin:c.pin,name:c.name};showLoading(c)}else{L.classList.add('auto');$('lerr').textContent='Signing you in...'}api({a:'myresults',sid:c.sid,pin:c.pin},60000).then(function(r){L.classList.remove('auto');if(r.ok){CRED={sid:c.sid,pin:c.pin,name:r.student.name};SS.set(CRED);$('lerr').textContent='';renderList(r)}else{SS.del();CRED=null;$('lerr').textContent='';show1('login')}},function(){L.classList.remove('auto');if(pre){CRED=null;show1('login');$('lerr').textContent='Could not reach the server. Check your internet and sign in again.'}else $('lerr').textContent=''})}}})();
 /* warm-up: while the student types the ID and password, wake the server and open the connection in the background (no data is read) */
 (function(){try{var c=SS.get();if(!(c&&c.sid&&c.pin))fetch(CFG.api+'?a=ping&_='+Date.now(),{cache:'no-store'}).catch(function(){})}catch(e){}})();
-function load(){$('lerr').textContent='Checking...';$('go').disabled=true;
+/* refresh while signed in: the name is known (kept for this tab only), so the page greets the student at once and shows grey placeholders until the real list arrives */
+function showLoading(c){show1('list');var nm=c.name||'',first=nm.split(/\s+/)[0];$('who').textContent=nm;$('who2').textContent=c.sid;$('anm').textContent=nm;$('av').textContent=(nm||'?').split(/\s+/).map(function(w){return w.charAt(0)}).join('').slice(0,2).toUpperCase();$('hello').innerHTML='Welcome back, <b>'+esc(first||'there')+'</b>! <span style="color:var(--mut)">Loading your tests...</span>';$('up').innerHTML='<div class="skel"></div><div class="skel"></div>';$('tbl').innerHTML='<div class="skel"></div>'}
+function load(){var le=$('lerr');le.className='err busy';le.innerHTML='<span class="spin"></span>Welcome! Checking your ID...';$('go').disabled=true;
  var sid=$('sid').value.trim(),pin=$('pin').value;
- return api({a:'myresults',sid:sid,pin:pin.trim()},30000).then(function(r){$('go').disabled=false;
+ return api({a:'myresults',sid:sid,pin:pin.trim()},30000).then(function(r){$('go').disabled=false;le.className='err';
   if(!r.ok){$('lerr').textContent=r.message||'Could not sign in.';return}
-  CRED={sid:sid,pin:pin.trim()};SS.set(CRED);$('lerr').textContent='';$('pin').value='';renderList(r)},
- function(){$('go').disabled=false;$('lerr').textContent='Could not reach the server. Check your internet and try again.'})}
+  CRED={sid:sid,pin:pin.trim(),name:r.student.name};SS.set(CRED);$('lerr').textContent='';$('pin').value='';renderList(r)},
+ function(){$('go').disabled=false;le.className='err';$('lerr').textContent='Could not reach the server. Check your internet and try again.'})}
 function vsBar(a){var mx=Number(a.max);if(!(mx>0))return'';var me=Math.max(0,Math.min(100,100*Number(a.score)/mx)),av=a.avgPct;
  return'<div class="vs"><div class="vsb"><i style="width:'+me+'%"></i>'+(av!=null?'<u style="left:'+Math.max(0,Math.min(99,av))+'%" title="Batch average"></u>':'')+'</div><small>You '+Math.round(me)+'%'+(av!=null?' &middot; batch average '+Math.round(av)+'%':'')+'</small></div>'}
 function hello(name,tests){var now=Date.now(),first=(name||'').split(/\s+/)[0],op=tests.filter(function(x){return x.state==='open'&&!(x.used>=x.max&&!x.resume)}),up=tests.filter(function(x){return x.state==='upcoming'&&x.opens}).sort(function(a,b){return a.opens-b.opens}),t='';
