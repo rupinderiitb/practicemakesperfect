@@ -123,6 +123,8 @@ td.rR{color:#1e8a3c;font-weight:700}td.rW{color:#d9402f;font-weight:700}td.rP{co
 <div class="f"><label for="sid">Your student ID</label><input id="sid" autocomplete="off"></div>
 <div class="f"><label for="pin">Your PIN or password (first PIN is given by your teacher)</label><input id="pin" type="password" autocomplete="off"></div>
 <div class="err" id="lerr" role="alert"></div><button class="btn pri big" id="go">Sign in</button>
+<div style="margin-top:12px"><a href="#" id="forgot" style="color:var(--mut)">Forgot your PIN or password?</a></div>
+<div id="fbox" hidden style="margin-top:10px;padding:12px;border:1px solid var(--ln,#ccd);border-radius:10px"><div style="margin-bottom:8px">Type your student ID above and press the button. Your teacher will be told and will give you a temporary PIN. Sign in with it and choose your own PIN or password.</div><button class="btn pri" id="fgo">Tell my teacher</button> <button class="btn" id="fcancel">Cancel</button><div id="fmsg" role="status" style="margin-top:8px"></div></div>
 </div>
 
 <div id="list" class="panel" hidden style="max-width:900px">
@@ -205,6 +207,7 @@ var RV=(function(){
    h+='<p><b>Medium and difficult questions you got stuck on</b> (more than 1.5 times the expected time, within your first '+N+'): '+(f.stuck.length?qlist(f.stuck,true):'none. Good selection.')+'</p>';
    if(f.slowEasy.length)h+='<p><b>Easy questions that took far longer than expected:</b> '+qlist(f.slowEasy,true)+'</p>';
    h+='<p><b>Time spent on questions you did not mark an answer for</b> (1½ minutes or more, before your '+N+'th answer): '+(f.sinks.length?qlist(f.sinks.map(function(x){return{q:x.q,level:x.level,time:x.time,exp:0}}),false)+'. Total <b>'+fmt(f.sinkSec)+'</b>. Moving on earlier would have bought time for the easy questions.':'none.')+'</p>'}
+  else if(f&&f.na){}
   else h+='<p><i>The order in which you answered was not recorded for this attempt, so the first-30 analysis is not available. Tests taken after this update have it.</i></p>';
   var lv=T.lvl||{},av=function(k){return lv[k]&&lv[k].n?fmt(lv[k].sec/lv[k].n):'—'};
   h+='<h3>Time management</h3><p>Average time per question: Easy <b>'+av('E')+'</b> · Medium <b>'+av('M')+'</b> · Difficult <b>'+av('D')+'</b>.<br>Answered in under half the expected time and wrong (rushed): <b>'+(T.fastWrong||0)+'</b> · More than 1.5 times the expected time and right (slow): <b>'+(T.slowRight||0)+'</b> · More than 1.5 times the expected time and not right (time lost): <b>'+(T.slowNotRight||0)+'</b>.</p>';
@@ -274,7 +277,9 @@ function hello(name,tests){var now=Date.now(),first=(name||'').split(/\s+/)[0],o
  else if(up.length)t='<span class="nx"><b>Next test:</b> '+esc(up[0].title)+' &middot; opens in '+left(up[0].opens-now)+' ('+F(up[0].opens)+')</span>';
  else t='<span class="nx">No test is open right now.</span>';
  $('hello').innerHTML='Hi <b>'+esc(first||'there')+'</b>!'+t}
+var FORCED=false;
 function renderList(r){show1('list');
+ if(r.mustChange){FORCED=true;$('chgbox').hidden=false;$('chgcancel').hidden=true;$('amenu').hidden=true;$('cmsg').style.color='';$('cmsg').textContent='Your teacher gave you a temporary PIN. Choose your own PIN or password now (4 to 40 characters).'}else if(FORCED){FORCED=false;$('chgbox').hidden=true;$('chgcancel').hidden=false}
  $('who').textContent=r.student.name;$('who2').textContent=r.student.sid+' · '+r.student.batch;$('anm').textContent=r.student.name;$('av').textContent=(r.student.name||'?').split(/\s+/).map(function(w){return w.charAt(0)}).join('').slice(0,2).toUpperCase();
  var tests=r.tests||[],uh='';window.TESTS=tests;hello(r.student.name,tests);
  if(!tests.length)uh='<p>No tests are scheduled for your batch right now.</p>';else{
@@ -308,8 +313,12 @@ $('chgok').onclick=function(){var a=$('np').value,c=$('np2').value,m=$('cmsg');m
  $('chgok').disabled=true;m.textContent='Saving...';
  api({a:'changepin',sid:CRED.sid,pin:CRED.pin,newpin:a},30000).then(function(r){$('chgok').disabled=false;
   if(!r.ok){m.textContent=r.message||'Could not change it.';return}
-  CRED.pin=a;SS.set(CRED);$('np').value=$('np2').value='';m.textContent='Saved. Use the new one next time you sign in.';m.style.color='green'},
+  CRED.pin=a;SS.set(CRED);$('np').value=$('np2').value='';m.textContent='Saved. Use the new one next time you sign in.';m.style.color='green';if(FORCED)load_back()},
  function(){$('chgok').disabled=false;m.textContent='Could not reach the server. Try again.'})};
+$('forgot').onclick=function(e){e.preventDefault();$('fbox').hidden=false;$('fmsg').textContent='';$('sid').focus()};
+$('fcancel').onclick=function(){$('fbox').hidden=true};
+$('fgo').onclick=function(){var s=$('sid').value.trim(),m=$('fmsg');if(!s){m.textContent='Type your student ID in the box above first.';return}
+ $('fgo').disabled=true;m.textContent='Sending...';api({a:'forgot',sid:s},30000).then(function(r){$('fgo').disabled=false;m.textContent=r.message||'Done.'},function(){$('fgo').disabled=false;m.textContent='Could not reach the server. Try again.'})};
 $('go').onclick=load;$('pin').onkeydown=$('sid').onkeydown=function(e){if(e.key==='Enter')load()};
 $('out').onclick=function(){CRED=null;SS.del();$('pin').value='';show1('login');$('pdfbox').innerHTML=''};
 
@@ -349,7 +358,7 @@ function themeOfSec(sec){var g=String(sec&&sec.group||'').toLowerCase();return G
 function beginExam(r,code){
  var sv=LS.get(),same=sv&&sv.token===r.token,P=r.paper,st=r.student||{};
  S={token:r.token,code:code,name:st.name,batch:st.batch,sid:st.sid,paper:P,title:P.title,theme:r.theme||'maths',strict:r.strictness!=='light',durationSec:r.durationSec,attemptNo:r.attemptNo,maxAttempts:r.maxAttempts,
-  answers:same?sv.answers||{}:{},times:same?sv.times||{}:{},changes:same?sv.changes||{}:{},marked:same?sv.marked||{}:{},visited:same?sv.visited||{}:{},log:same&&sv.log?sv.log:{seq:[],at:{},snap:null,snapAt:0},firstN:r.firstN||30,
+  answers:same?sv.answers||{}:{},times:same?sv.times||{}:{},changes:same?sv.changes||{}:{},marked:same?sv.marked||{}:{},visited:same?sv.visited||{}:{},log:same&&sv.log?sv.log:{seq:[],at:{},snap:null,snapAt:0},firstN:r.firstN==null?30:r.firstN,
   strikes:same?sv.strikes||[]:[],wifiPass:same?sv.wifiPass||0:0,onlineEvents:same?sv.onlineEvents||0:0,pastes:same?sv.pastes||0:0,cur:same?sv.cur||0:0,final:false,qs:{},order:[],secOf:{},sdata:{}};
  var rem=r.remainingSec;
  if(rem==null){S.endWall=sv.endWall}else{S.endWall=Date.now()+rem*1000}
@@ -363,7 +372,7 @@ function beginExam(r,code){
  if(r.stopMode==='hard'&&!r.resume&&r.remainingSec!=null&&r.durationSec-r.remainingSec>60)setTimeout(function(){modal('This test closes at '+new Date(r.closesAt).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}),'You started late, so you have '+fmt(r.remainingSec)+' instead of the full '+fmt(r.durationSec)+'. The clock is running.',[{t:'Start',pri:1}])},300);
  startTimers();acquireWake();
  if(S.strict&&S.strikes.length>=CFG.maxStrikes){submitNow('strikes')}}
-function trackOrder(){if(!S||S.final||!S.log||S.endWall==null)return;var L=S.log,el=Math.max(0,Math.round(S.durationSec-rem()));S.order.forEach(function(id){if((S.answers[id]||'')!==''&&L.at[id]===undefined){L.at[id]=el;L.seq.push(id)}});if(!L.snap&&L.seq.length>=S.firstN){var t={};Object.keys(S.times).forEach(function(k){t[k]=S.times[k]});var cid=S.order[S.cur];if(!away)t[cid]=(t[cid]||0)+(performance.now()-qStart)/1000;L.snap=roundT(t);L.snapAt=el}}
+function trackOrder(){if(!S||S.final||!S.log||S.endWall==null)return;var L=S.log,el=Math.max(0,Math.round(S.durationSec-rem()));S.order.forEach(function(id){if((S.answers[id]||'')!==''&&L.at[id]===undefined){L.at[id]=el;L.seq.push(id)}});if(S.firstN>0&&!L.snap&&L.seq.length>=S.firstN){var t={};Object.keys(S.times).forEach(function(k){t[k]=S.times[k]});var cid=S.order[S.cur];if(!away)t[cid]=(t[cid]||0)+(performance.now()-qStart)/1000;L.snap=roundT(t);L.snapAt=el}}
 function save(withPaper){if(!S)return;trackOrder();var o={log:S.log,token:S.token,code:S.code,name:S.name,batch:S.batch,sid:S.sid,title:S.title,theme:S.theme,strict:S.strict,durationSec:S.durationSec,attemptNo:S.attemptNo,maxAttempts:S.maxAttempts,endWall:S.endWall,answers:S.answers,times:S.times,changes:S.changes,marked:S.marked,visited:S.visited,strikes:S.strikes,wifiPass:S.wifiPass||0,onlineEvents:S.onlineEvents,pastes:S.pastes,cur:S.cur,done:false};
  var old=LS.get();if(old&&old.token===S.token&&old.paper&&!withPaper)o.paper=old.paper;else if(withPaper)o.paper=S.paper;if(old&&old.token===S.token&&old.pend)o.pend=old.pend;
  if(!LS.set(o)){delete o.paper;LS.set(o)}}
