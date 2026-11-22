@@ -232,6 +232,8 @@ var F=function(ms){return ms?new Date(ms).toLocaleString('en-IN',{day:'numeric',
 (function(){var sv=LS.get();if(sv&&sv.token&&!sv.done){$('resumebox').hidden=false;$('resumeinfo').textContent=(sv.title||'')+(sv.name?' - '+sv.name:'');$('sid').value=sv.sid||''}
  if(sv&&sv.pend){showWait(sv)}
  else if(!(sv&&sv.token&&!sv.done)){var c=SS.get();if(c&&c.sid&&c.pin){var L=$('login');L.classList.add('auto');$('lerr').textContent='Signing you in...';api({a:'myresults',sid:c.sid,pin:c.pin},60000).then(function(r){L.classList.remove('auto');if(r.ok){CRED={sid:c.sid,pin:c.pin};$('lerr').textContent='';renderList(r)}else{SS.del();$('lerr').textContent=''}},function(){L.classList.remove('auto');$('lerr').textContent=''})}}})();
+/* warm-up: while the student types the ID and password, wake the server and open the connection in the background (no data is read) */
+(function(){try{var c=SS.get();if(!(c&&c.sid&&c.pin))fetch(CFG.api+'?a=ping&_='+Date.now(),{cache:'no-store'}).catch(function(){})}catch(e){}})();
 function load(){$('lerr').textContent='Checking...';$('go').disabled=true;
  var sid=$('sid').value.trim(),pin=$('pin').value;
  return api({a:'myresults',sid:sid,pin:pin.trim()},30000).then(function(r){$('go').disabled=false;
