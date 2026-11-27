@@ -94,6 +94,7 @@ input,select,textarea{background:var(--c-surface);color:var(--c-text)}input::pla
 .eye{position:absolute;top:0;right:0;bottom:0;width:46px;display:flex;align-items:center;justify-content:center;background:transparent!important;border:0!important;border-radius:0 8px 8px 0!important;padding:0!important;margin:0!important;min-height:0;color:var(--c-text-muted)!important;cursor:pointer}
 .eye:hover{color:var(--c-text)!important}.eye[aria-pressed=true]{color:var(--brand-primary)!important}.eye svg{width:22px;height:22px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
 @media(max-width:800px){.eye{width:52px;min-width:48px}.eyewrap>input{min-height:48px}}
+.la-away td{color:var(--mu);background:var(--c-surface-2)}.la-away td.nm{font-weight:500}.pill.la{background:var(--c-surface-2);border-color:var(--mu);color:var(--mu)}#lbox .lal{max-height:46vh;overflow:auto;border:1px solid var(--ln);border-radius:8px;margin:8px 0;padding:4px 10px}#lbox .lal h4{margin:10px 0 2px;font-size:13px}#lbox .lal label{display:flex;gap:8px;align-items:center;padding:5px 0;border-bottom:1px solid var(--c-border)}#lbox .lal label.dis{color:var(--mu)}#lbox input[type=text],#lbox input[type=date],#lbox input[type=search]{width:100%;padding:8px;margin:4px 0 8px}
 </style><script>(function(){var K='aiit-theme',d=document.documentElement;
 function get(){try{return localStorage.getItem(K)==='dark'?'dark':'light'}catch(e){return'light'}}
 function paint(m){[].forEach.call(document.querySelectorAll('[data-themetoggle] button'),function(b){var on=b.getAttribute('data-m')===m;b.className=on?'on':'';b.setAttribute('aria-pressed',on?'true':'false')});if(window.aiitLogos)window.aiitLogos()}
@@ -111,6 +112,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 <div id="rbox" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9"><div style="background:var(--c-surface);border-radius:10px;padding:20px;width:380px;max-width:92vw"><h3 style="margin-top:0">Temporary PIN</h3><div id="rtxt"></div><p><button class="pri" id="rok">Done</button></p></div></div>
 <div id="cbox" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9"><div style="background:var(--c-surface);border-radius:10px;padding:20px;width:340px;max-width:92vw"><h3 style="margin-top:0">Change password</h3><label>Current password<input id="cp0" type="password" autocomplete="current-password" style="width:100%;padding:8px;margin:4px 0 8px"></label><label>New password (4 to 40 characters)<input id="cp1" type="password" autocomplete="new-password" style="width:100%;padding:8px;margin:4px 0 8px"></label><label>New password again<input id="cp2" type="password" autocomplete="new-password" style="width:100%;padding:8px;margin:4px 0 8px"></label><div id="cmsg" style="min-height:20px;font-size:13px"></div><button class="pri" id="cok">Change</button> <button id="ccancel">Cancel</button></div></div>
 </main>
+<div id="lbox" hidden style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;z-index:9"><div style="background:var(--c-surface);border-radius:10px;padding:20px;width:520px;max-width:94vw;max-height:92vh;overflow:auto"><h3 style="margin-top:0">Long absence</h3><div id="lbody"></div></div></div>
 <script>(function(){var ON='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>',OFF='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.9 17.9A10.9 10.9 0 0 1 12 19C5 19 1 12 1 12a18.5 18.5 0 0 1 5.1-5.9M9.9 4.2A9.8 9.8 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.2 3.2M14.1 14.1a3 3 0 1 1-4.2-4.2"/><path d="M1 1l22 22"/></svg>';
 function show(i,b,v){i.type=v?'text':'password';if(v){i.setAttribute('autocapitalize','off');i.spellcheck=false}b.setAttribute('aria-pressed',v?'true':'false');b.setAttribute('aria-label',v?'Hide password':'Show password');b.innerHTML=v?OFF:ON}
 function hideAll(){[].forEach.call(document.querySelectorAll('.eyewrap'),function(w){var i=w.querySelector('input'),b=w.querySelector('.eye');if(i&&b&&i.type!=='password')show(i,b,false)})}
@@ -217,7 +219,7 @@ function dayName(k){var d=new Date(k+'T00:00:00Z');return['Sun','Mon','Tue','Wed
 function reasonText(s){return s.reason==='future'?'Not yet':s.reason==='too_old'?'Too old to edit here':s.reason==='marked_by_other'?'Marked by '+esc(s.markedBy):''}
 function drawAtt(){var r=ATT.data,h='<div id="attday"></div><a class="back" onclick="drawHome()">&larr; Overview</a><h2>Attendance <span class="sub">'+esc(dayName(r.date))+(r.date===r.today?' (today)':'')+'</span></h2>';
  if(ATT.msg)h+='<div class="note" id="attmsg">'+esc(ATT.msg)+'</div>';
- h+='<div class="tools"><button onclick="openAtt(\''+shiftDay(r.date,-1)+'\')">&larr; Previous day</button><button onclick="openAtt()">Today</button><button onclick="openAtt(\''+shiftDay(r.date,1)+'\')">Next day &rarr;</button><input type="date" id="attdate" value="'+r.date+'" onchange="if(this.value)openAtt(this.value)"><button class="pri" onclick="showExtra()">Add extra class</button><button onclick="openRep()">Attendance reports</button></div>';
+ h+='<div class="tools"><button onclick="openAtt(\''+shiftDay(r.date,-1)+'\')">&larr; Previous day</button><button onclick="openAtt()">Today</button><button onclick="openAtt(\''+shiftDay(r.date,1)+'\')">Next day &rarr;</button><input type="date" id="attdate" value="'+r.date+'" onchange="if(this.value)openAtt(this.value)"><button class="pri" onclick="showExtra()">Add extra class</button><button onclick="openRep()">Attendance reports</button><button onclick="openLA()">Long absence</button></div>';
  if(r.pending.length)h+='<div class="note">Not marked yet: '+r.pending.map(function(p){return'<a class="back" onclick="openAtt(\''+p.date+'\')">'+esc(dayName(p.date))+' ('+p.count+')</a>'}).join(' &middot; ')+'. Classes can be marked for '+r.editDays+' days.</div>';
  if(!r.sessions.length)h+='<p class="sub">No classes or tests for you on this day. Extra classes can be added with the button above.</p>';
  else{h+='<div class="tw"><table class="atts"><tr><th>Time</th><th>What</th><th>Batch</th><th>State</th><th></th></tr>';
@@ -242,8 +244,9 @@ function drawRoll(){var r=ATT.ro,s=r.session,ed=!!s.canMark,h='<a class="back" o
  h+='<div id="attbody">'+rollHtml(ed)+'</div>';
  h+='<div class="tools"><input id="attnote" placeholder="Note (optional)" style="min-width:260px" value="'+esc(ATT.extra?ATT.extra.note||'':(r.groups[0]&&r.groups[0].note)||r.session.note||'')+'"'+(ed?'':' disabled')+'>'+(ed?'<button class="pri" id="attsave" onclick="saveRoll()">Save</button>':'')+'<button onclick="openAtt(ATT.date)">'+(ed?'Cancel':'Back')+'</button></div>';
  $('app').innerHTML=h;pmStat()}
-function rollHtml(ed){var h='',idx=0;ATT.ro.groups.forEach(function(g){h+='<h3>'+esc(g.batch)+' <span class="sub">'+g.students.length+' students</span></h3><div class="tw rw"><table class="roll">';
+function rollHtml(ed){var h='',idx=0;ATT.ro.groups.forEach(function(g){var aw=g.away||[];h+='<h3>'+esc(g.batch)+' <span class="sub">'+g.students.length+' students'+(aw.length?' &middot; '+aw.length+' on long absence':'')+'</span></h3><div class="tw rw"><table class="roll">';
   g.students.forEach(function(s){var i=idx++;h+='<tr data-n="'+esc(s.name.toLowerCase())+'"><td class="nm">'+esc(s.name)+(s.batch&&s.batch!==g.batch?' <span class="sub">'+esc(s.batch)+'</span>':'')+'</td><td class="mk" id="mk'+i+'">'+markBtns(i,ed)+'</td><td class="pm" id="pmc'+i+'">'+pmCell(i,ed)+'</td></tr>'});
+  (g.away||[]).forEach(function(a){h+='<tr class="la-away" data-n="'+esc(a.name.toLowerCase())+'"><td class="nm">'+esc(a.name)+' <span class="pill la">Long absence</span></td><td class="mk sub">'+esc(a.text)+'</td><td class="pm"></td></tr>'});
   h+='</table></div>'});return h}
 function markBtns(i,ed){var m=ATT.marks[ATT.list[i]]||'',dis=!(ed&&!ATT.cancelled),h='<select class="ms'+(m?' m'+m+' on':'')+'" id="ms'+i+'" aria-label="Attendance"'+(dis?' disabled':' onchange="mk('+i+',this.value)"')+'><option value="">Present</option>';['L','T','U','I','N'].forEach(function(c){h+='<option value="'+c+'"'+(m===c?' selected':'')+'>'+esc(ASTL[c])+'</option>'});return h+'</select>'+waAbsent(ATT.list[i],m)}
 function mk(i,c){var sid=ATT.list[i];if(c&&ASTL[c])ATT.marks[sid]=c;else delete ATT.marks[sid];$('mk'+i).innerHTML=markBtns(i,true);pmRefresh(i,true);$('attcount').innerHTML=countText();pmStat()}
@@ -259,6 +262,32 @@ function saveRoll(){var r=ATT.ro,b={marks:{},cancelled:ATT.cancelled,note:$('att
   $('attsave').disabled=false;$('attsave').textContent='Save';
   if(x.error==='lock_warning'){if(confirm(x.message)){ATT.force=true;saveRoll()}return}
   alert(x.message||'Not saved.')})}
+/* long absence: a student who has not left but is not coming to class (still takes tests). Any one teacher of the batch can start it; only the owner ends it, in the Sheet. */
+var LA={list:[],sel:{},today:'',from:'',reason:''};
+function dmyK(k){return k&&k.length>=10?k.slice(8,10)+'-'+k.slice(5,7)+'-'+k.slice(0,4):''}
+function laErr(m){$('lbody').innerHTML='<div class="note">'+esc(m||'Not possible.')+'</div><button onclick="closeLA()">Close</button>'}
+function closeLA(){$('lbox').hidden=true}
+function openLA(){LA.sel={};LA.reason='';$('lbox').hidden=false;$('lbody').innerHTML='<p class="sub">Loading...</p>';
+ call('t_la_list',{}).then(function(r){if(!r.ok)return laErr(r.message);LA.list=r.students;LA.today=r.today;LA.from=r.today;laDraw()})}
+function laDraw(){var h='<p class="sub">Tick the students of your batches who are not coming to class for a long time (they have not left and can still take tests). Only the owner can undo this, in the Sheet.</p><input type="search" id="laq" placeholder="Search a name" oninput="laFilter()"><div class="lal" id="lal">',last=null;
+ if(!LA.list.length)h+='<p class="sub">No students found for your batches.</p>';
+ LA.list.forEach(function(s,i){if(s.batch!==last){h+='<h4>'+esc(s.batch)+'</h4>';last=s.batch}
+  h+='<label data-n="'+esc(s.name.toLowerCase())+'"'+(s.away?' class="dis"':'')+'><input type="checkbox" class="lac" data-i="'+i+'"'+(s.away?' disabled':'')+(LA.sel[s.sid]?' checked':'')+' onchange="laTick(this)"> <span>'+esc(s.name)+'</span>'+(s.away?' <span class="pill la">on long absence since '+esc(s.since)+'</span>':'')+'</label>'});
+ h+='</div><label>Reason (required)<input type="text" id="lare" maxlength="200" placeholder="e.g. preparing from home" value="'+esc(LA.reason)+'" oninput="LA.reason=this.value"></label><label>From <small>(today, or an earlier day when they stopped coming)</small><input type="date" id="lafr" max="'+esc(LA.today)+'" value="'+esc(LA.from)+'" onchange="LA.from=this.value"></label><div class="sub" id="lacount"></div><div id="lamsg" style="min-height:20px;font-size:13px"></div><button class="pri" onclick="laNext()">Continue</button> <button onclick="closeLA()">Cancel</button>';
+ $('lbody').innerHTML=h;laCount()}
+function laTick(c){var s=LA.list[+c.getAttribute('data-i')];if(c.checked)LA.sel[s.sid]=1;else delete LA.sel[s.sid];laCount()}
+function laCount(){var n=Object.keys(LA.sel).length;if($('lacount'))$('lacount').textContent=n+' selected'}
+function laFilter(){var q=$('laq').value.trim().toLowerCase(),L=document.querySelectorAll('#lal label');for(var i=0;i<L.length;i++)L[i].style.display=!q||L[i].getAttribute('data-n').indexOf(q)>=0?'':'none'}
+function laNext(){var ids=Object.keys(LA.sel),m=$('lamsg');LA.reason=$('lare').value.trim();LA.from=$('lafr').value||LA.today;
+ if(!ids.length){m.textContent='Tick at least one student.';return}
+ if(LA.reason.length<3){m.textContent='Please write the reason (a few words).';return}
+ if(LA.from>LA.today){m.textContent='The "from" date cannot be in the future.';return}
+ var names=LA.list.filter(function(s){return LA.sel[s.sid]}).map(function(s){return s.name});
+ $('lbody').innerHTML='<p><b>You are marking '+ids.length+' student'+(ids.length>1?'s':'')+' as on Long absence from '+esc(dmyK(LA.from))+':</b></p><p>'+names.map(esc).join(', ')+'</p><p class="sub">Reason: '+esc(LA.reason)+'<br>They leave the attendance lists and the percentage from that date, and can still sign in and take tests. The owner is told through the Sheet. Only the owner can undo this.</p><div id="lamsg" style="min-height:20px;font-size:13px"></div><button class="pri" id="lago" onclick="laSave()">Confirm</button> <button onclick="laDraw()">Back</button>'}
+function laSave(){$('lago').disabled=true;$('lago').textContent='Saving...';
+ call('t_la_set',{sids:Object.keys(LA.sel),reason:LA.reason,from:LA.from}).then(function(x){
+  if(x.ok){closeLA();ATC={};var d=(ATT&&ATT.date)||'';openAtt(d||undefined,'Long absence recorded for '+x.added+' student'+(x.added>1?'s':'')+' from '+dmyK(x.from)+'.',true);return}
+  $('lago').disabled=false;$('lago').textContent='Confirm';$('lamsg').textContent=x.message||'Not saved.'})}
 /* extra class */
 function showExtra(){if(ATT.data.myBatches)return drawExtra();busy();call('t_att_batches',{}).then(function(x){if(!x.ok)return fail(x);ATT.data.myBatches=x.myBatches;drawExtra()})}
 function drawExtra(){var r=ATT.data,h='<a class="back" onclick="openAtt(ATT.date)">&larr; '+esc(dayName(r.date))+'</a><h2>Add an extra class</h2><p class="sub">For a class that is not in the timetable. It is stored with the batches you pick; one list for all of them.</p>';
