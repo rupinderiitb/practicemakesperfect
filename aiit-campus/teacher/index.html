@@ -191,7 +191,7 @@ function openWeek(from){var key=from||'t',c=WKC[key];
 function prefetchWeek(){var f0=WK.from;setTimeout(function(){[-7,7].forEach(function(n,i){var f=shiftDay(f0,n);setTimeout(function(){if($('wkview')&&WK.from===f0&&!WKC[f])fetchWeek(f)},i*1200)})},500)}
 function shiftDay(k,n){var d=new Date(k+'T00:00:00Z');d.setUTCDate(d.getUTCDate()+n);return d.toISOString().slice(0,10)}
 function niceD(k){var d=new Date(k+'T00:00:00Z'),M=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];return d.getUTCDate()+' '+M[d.getUTCMonth()]}
-function drawWeek(){var r=WK,s=r.summary,h='<div id="wkview"></div><a class="back" onclick="drawHome()">&larr; Overview</a><h2>My week <span class="sub">'+niceD(r.from)+' - '+niceD(r.to)+'</span></h2>';
+function drawWeek(){var r=WK,s=r.summary,h='<div id="wkview"></div><a class="back" onclick="drawHome()">&larr; Overview</a><h2>My week <span class="sub">'+niceD(r.from)+' - '+niceD(r.to)+'</span></h2>'+wkTabs(r,'me');
  h+='<div class="tabs"><button onclick="openWeek(\''+shiftDay(r.from,-7)+'\')">&larr; Previous week</button><button onclick="openWeek()">This week</button><button onclick="openWeek(\''+shiftDay(r.from,7)+'\')">Next week &rarr;</button></div>';
  h+='<div class="cards"><div class="card"><b>'+s.hours+'</b><span>teaching hours</span></div><div class="card"><b>'+s.items+'</b><span>entries this week</span></div><div class="card"><b>'+s.leaveDays+'</b><span>leave days (AL)</span></div>'+(r.leaves?'<div class="card"><b>'+r.leaves.used+' of '+r.leaves.allowance+'</b><span>leaves used this year (ends '+niceD(r.leaves.to)+')'+(r.leaves.upcoming?', '+r.leaves.upcoming+' booked ahead':'')+'</span></div>':'')+'</div>';
  r.days.forEach(function(d){var du=d.duty,t=du?(du.status==='duty'?'On duty '+du.ranges.map(function(x){return x[0]+'-'+x[1]}).join(', '):du.status==='AL'?'Annual leave':du.status==='week off'?'Week off':du.status==='birthday off'?'Birthday off':du.status==='break'?'Break':esc(du.raw)):'';
@@ -202,6 +202,35 @@ function drawWeek(){var r=WK,s=r.summary,h='<div id="wkview"></div><a class="bac
    h+='<tr><td>'+esc(x.start)+'-'+esc(x.end)+'</td><td>'+esc(what)+'</td><td>'+esc(x.targets.join(', '))+'</td><td>'+esc([x.topic].concat(x.flags).filter(function(z){return z}).join(' · '))+'</td></tr>'});
   h+='</table></div>'});
  h+=tmLine(r);$('app').innerHTML=h}
+
+/* ---------- Whole schedule (owner only, read-only): every teacher and batch of the week, with filters and the attendance state ---------- */
+var WKA=null,WKAC={},WKF={t:'',b:''};
+function wkTabs(r,on){if(!(r.teacher&&r.teacher.owner))return'';return'<div class="tabs"><button'+(on==='me'?' class="on"':'')+' onclick="openWeek(\''+r.from+'\')">My week</button><button'+(on==='all'?' class="on"':'')+' onclick="openWeekAll(\''+r.from+'\')">Whole schedule</button></div>'}
+function fetchWeekAll(from){var t0=Date.now();return call('t_week_all',from?{from:from}:{}).then(function(r){if(r.ok){r._rt=Date.now()-t0;WKAC[from||'t']={r:r,t:Date.now()}}return r})}
+function openWeekAll(from){var key=from||'t',c=WKAC[key];
+ if(c){WKA=c.r;drawWeekAll();if(Date.now()-c.t>30000)fetchWeekAll(from).then(function(r){if(r.ok&&$('wkall')&&WKA.from===r.from){WKA=r;drawWeekAll()}});return}
+ busy();fetchWeekAll(from).then(function(r){if(!r.ok)return fail(r);WKA=r;drawWeekAll()})}
+function wkaOpts(list,cur){var o=list.slice();if(cur&&o.indexOf(cur)<0)o.push(cur);o.sort();return o.map(function(x){return'<option value="'+esc(x)+'"'+(x===cur?' selected':'')+'>'+esc(x)+'</option>'}).join('')}
+function wkaSet(k,v){WKF[k]=v;drawWeekAll()}
+function wkaKeep(it){if(WKF.t&&it.teachers.indexOf(WKF.t)<0&&it.invs.indexOf(WKF.t)<0)return false;if(WKF.b&&it.targets.indexOf(WKF.b)<0)return false;return true}
+function drawWeekAll(){var r=WKA,TS=[],BS=[];
+ r.days.forEach(function(d){d.items.forEach(function(it){it.teachers.concat(it.invs).forEach(function(x){if(x&&TS.indexOf(x)<0)TS.push(x)});it.targets.forEach(function(x){if(x&&BS.indexOf(x)<0)BS.push(x)})})});
+ var n=0,hr=0,mk=0,um=0,cx=0,body='';
+ r.days.forEach(function(d){var L=d.items.filter(wkaKeep);
+  body+='<h3'+(d.date===r.today?' style="color:var(--ac)"':'')+'>'+d.dow+' '+niceD(d.date)+(d.date===r.today?' (today)':'')+'</h3>';
+  if(!L.length){body+='<div class="sub">No classes.</div>';return}
+  body+='<div class="tw"><table class="wk"><tr><th>Time</th><th>What</th><th>Batch</th><th>Teacher</th><th>State</th><th>Note</th></tr>';
+  L.forEach(function(x){n++;if((x.type==='Class'||x.type==='Test')&&x.start&&x.end){var a=x.start.split(':'),e=x.end.split(':'),m=(e[0]*60+ +e[1])-(a[0]*60+ +a[1]);if(m>0)hr+=m/60}
+   var what=x.type==='Test'?'Test'+(x.testName?': '+x.testName:''):x.type==='Class'?(x.subject||x.code):x.type;
+   var tch=x.teachers.join(', ');if(x.invs.length)tch+=(tch?'; ':'')+'invigilation: '+x.invs.join(', ');
+   var st='';if(x.state==='marked'){mk++;st='Marked'+(x.markedBy?' <span class="sub">by '+esc(x.markedBy)+'</span>':'')}else if(x.state==='unmarked'){um++;st='<b class="r">Not marked yet</b>'}else if(x.state==='cancelled'){cx++;st='Cancelled'}
+   body+='<tr><td>'+esc(x.start)+'-'+esc(x.end)+'</td><td>'+esc(what)+'</td><td>'+esc(x.targets.join(', '))+'</td><td>'+esc(tch)+'</td><td>'+st+'</td><td>'+esc([x.topic].concat(x.flags).filter(function(z){return z}).join(' · '))+'</td></tr>'});
+  body+='</table></div>'});
+ var h='<div id="wkall"></div><a class="back" onclick="drawHome()">&larr; Overview</a><h2>Whole schedule <span class="sub">'+niceD(r.from)+' - '+niceD(r.to)+'</span></h2>'+wkTabs({teacher:{owner:true},from:r.from},'all');
+ h+='<div class="tabs"><button onclick="openWeekAll(\''+shiftDay(r.from,-7)+'\')">&larr; Previous week</button><button onclick="openWeekAll()">This week</button><button onclick="openWeekAll(\''+shiftDay(r.from,7)+'\')">Next week &rarr;</button></div>';
+ h+='<div class="tools"><label>Teacher <select id="wkat" onchange="wkaSet(\'t\',this.value)"><option value="">All teachers</option>'+wkaOpts(TS,WKF.t)+'</select></label> <label>Batch <select id="wkab" onchange="wkaSet(\'b\',this.value)"><option value="">All batches</option>'+wkaOpts(BS,WKF.b)+'</select></label>'+((WKF.t||WKF.b)?' <button onclick="WKF={t:\'\',b:\'\'};drawWeekAll()">Clear filters</button>':'')+'</div>';
+ h+='<div class="cards"><div class="card"><b>'+n+'</b><span>entries'+((WKF.t||WKF.b)?' (filtered)':'')+'</span></div><div class="card"><b>'+(Math.round(hr*100)/100)+'</b><span>class + test hours</span></div><div class="card"><b>'+mk+'</b><span>marked</span></div><div class="card"><b>'+um+'</b><span>not marked yet</span></div><div class="card"><b>'+cx+'</b><span>cancelled</span></div></div>';
+ $('app').innerHTML=h+body+tmLine(r)}
 
 /* ---------- Attendance (Phase B): the day's classes, one combined list per class, pick a status from the dropdown, save ---------- */
 var ATT={date:'',data:null,ro:null,marks:{},list:[],extra:null,force:false,cancelled:false,msg:''};
