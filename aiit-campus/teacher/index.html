@@ -296,6 +296,10 @@ function fetchWeekAll(from){var t0=Date.now();return call('t_week_all',from?{fro
 function openWeekAll(from){var key=from||'t',c=WKAC[key];
  if(c){WKA=c.r;drawWeekAll();if(Date.now()-c.t>30000)fetchWeekAll(from).then(function(r){if(r.ok&&$('wkall')&&WKA.from===r.from){WKA=r;drawWeekAll()}});return}
  busy();fetchWeekAll(from).then(function(r){if(!r.ok)return fail(r);WKA=r;drawWeekAll()})}
+/* Batch order in the grids: Class 12 (2027 batches), Class 11 (2028 batches), foundation, Dhyeya foundation (Dh_ 10th), then any other batch; inside a group the order below, unknown names A-Z */
+var BORD=["Adv'27 Advance","Adv'27 Mains, CET","Adv'27 Mains","CET'27","Dhyeya'27","Adv'28","Adv'28 Plus","Dhyeya'28 Pune","Dhyeya'28 Hyderabad","Fdn'26 Adv","Fdn'26 Basic","Fdn+ 9th/10th","10th Fdn'26","DhK 10th'26","DhH 10th'26","DhP 10th'26"];
+function batchGrp(n){n=String(n||'');if(/^Dh[A-Z] 10th/i.test(n))return 3;if(/'27\b/.test(n))return 0;if(/'28\b/.test(n))return 1;if(/fdn|found|^F(B|Plus|Adv|10)|10th|9th/i.test(n))return 2;return 4}
+function batchCmp(a,b){var ga=batchGrp(a),gb=batchGrp(b);if(ga!==gb)return ga-gb;var ia=BORD.indexOf(a),ib=BORD.indexOf(b);if(ia>=0&&ib>=0)return ia-ib;if(ia>=0)return -1;if(ib>=0)return 1;var x=String(a).toLowerCase(),y=String(b).toLowerCase();return x<y?-1:x>y?1:0}
 function wkaOpts(list,cur){var o=list.slice();if(cur&&o.indexOf(cur)<0)o.push(cur);o.sort();return o.map(function(x){return'<option value="'+esc(x)+'"'+(x===cur?' selected':'')+'>'+esc(x)+'</option>'}).join('')}
 function wkaSet(k,v){WKF[k]=v;drawWeekAll()}
 function wkaKeep(it){if(WKF.t&&it.teachers.indexOf(WKF.t)<0&&it.invs.indexOf(WKF.t)<0)return false;if(WKF.b&&it.targets.indexOf(WKF.b)<0)return false;return true}
@@ -316,7 +320,7 @@ function wkaListDay(d,L){var body=wkaDayH(d);
 function wkaGridDay(d,L){var body=wkaDayH(d);if(!L.length)return body+'<div class="sub">No classes.</div>';
  var B=[],E=[];L.forEach(function(x){var w=wkaWhat(x),t=wkaTch(x);x.targets.forEach(function(b){if(B.indexOf(b)<0)B.push(b);
   E.push({c:b,s:x.start,e:x.end,allday:wkLong(x),cls:x.state==='marked'?'g1':x.state==='unmarked'?'g2':x.state==='cancelled'?'g3':'',html:'<b>'+esc(w)+'</b>'+(t&&t!==w?'<span>'+esc(t)+'</span>':'')+(x.state==='cancelled'?'<span>Cancelled</span>':''),title:[x.topic].concat(x.flags).filter(function(z){return z}).join(' · ')})})});
- B.sort(function(a,b){return a<b?-1:a>b?1:0});
+ B.sort(batchCmp);
  return body+taGrid(B.map(function(b){return{k:b,label:esc(b)}}),E)}
 function drawWeekAll(){var r=WKA,TS=[],BS=[];
  r.days.forEach(function(d){d.items.forEach(function(it){it.teachers.concat(it.invs).forEach(function(x){if(x&&TS.indexOf(x)<0)TS.push(x)});it.targets.forEach(function(x){if(x&&BS.indexOf(x)<0)BS.push(x)})})});
@@ -349,7 +353,7 @@ function wkxEnt(x,b){var on=x.flags.indexOf('online')>=0,cx=x.state==='cancelled
   o=x.targets.filter(function(z){return z!==b});
  return{c:b,s:x.start,e:x.end,allday:wkLong(x),cls:cls,html:'<b>'+esc(w)+'</b>'+(t?'<span>'+esc(t)+'</span>':'')+(o.length?'<span>with '+esc(o.join(', '))+'</span>':'')+(cx?'<span>Cancelled</span>':'')+(x.mine&&!cx?'<span class="you">YOU</span>':''),title:x.flags.join(' · ')}}
 function wkxGridDay(d){var r=WKX,body='<h3'+(d.date===r.today?' style="color:var(--ac)"':'')+'>'+d.dow+' '+niceD(d.date)+(d.date===r.today?' (today)':'')+'</h3>';if(!d.items.length)return body+'<div class="sub">No classes.</div>';
- var B=r.batches.slice(),E=[];d.items.forEach(function(x){x.targets.forEach(function(b){if(B.indexOf(b)<0)B.push(b);E.push(wkxEnt(x,b))})});
+ var B=r.batches.slice(),E=[];d.items.forEach(function(x){x.targets.forEach(function(b){if(B.indexOf(b)<0)B.push(b);E.push(wkxEnt(x,b))})});B.sort(batchCmp);
  return body+taGrid(B.map(function(b){return{k:b,label:esc(b)}}),E)}
 function drawWeekCentre(){var r=WKX,dk=r.days.map(function(d){return d.date});
  if(WKXV.d!=='week'&&dk.indexOf(WKXV.d)<0)WKXV.d=dk.indexOf(r.today)>=0?r.today:r.from;
@@ -359,7 +363,7 @@ function drawWeekCentre(){var r=WKX,dk=r.days.map(function(d){return d.date});
  h+='<div class="wkleg"><span class="gk gm">Your class</span><span class="gk go">Other teacher</span><span class="gk gi">ICR</span><span class="gk gn">Online</span><span class="gk gt4">Test</span><span class="gk g3x">Cancelled</span><span class="sub">Read-only. A cancelled class frees its slot.</span></div>';
  if(WKXV.d===r.today){var nm=wkxNow(),td=r.days.filter(function(d){return d.date===r.today})[0],busyB={};
   td.items.forEach(function(x){if(x.state==='cancelled'||x.type==='Holiday')return;var a=wkxM(x.start),e=wkxM(x.end);if(a<=nm&&nm<e)x.targets.forEach(function(b){busyB[b]=1})});
-  var fr=r.batches.filter(function(b){return!busyB[b]}),hm=('0'+Math.floor(nm/60)).slice(-2)+':'+('0'+nm%60).slice(-2);
+  var fr=r.batches.filter(function(b){return!busyB[b]}).sort(batchCmp),hm=('0'+Math.floor(nm/60)).slice(-2)+':'+('0'+nm%60).slice(-2);
   h+='<div class="nowx"><b>Now '+hm+':</b>'+(fr.length?'No class right now: '+esc(fr.join(', ')):'every batch has something on right now.')+'</div>'}
  h+=scope.map(wkxGridDay).join('');
  $('app').innerHTML=h+tmLine(r);
