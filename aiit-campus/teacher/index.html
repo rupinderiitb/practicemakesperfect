@@ -100,6 +100,16 @@ table.wk{table-layout:auto;width:100%}table.wk th,table.wk td{padding:6px 10px}t
 .cal .ev.es{display:block}.cal .ev.es>b{display:block}.cal .ev.es span{display:none}.cal .ev.es span.gt,.cal .ev.es span.gt+span,.cal .ev.es span.cx{display:inline}.cal .ev.es span.gt{margin:0}.cal .ev.es span.gt+span,.cal .ev.es span.cx{margin-left:6px}
 .cal .ev.ex{display:block;padding:1px 5px;line-height:1.15;font-size:11.5px}.cal .ev.ex>b{display:inline}.cal .ev.ex span{display:none}.cal .ev.ex span.gt,.cal .ev.ex span.cx{display:inline;font-size:10.5px;margin:0 0 0 5px}
 @media (max-width:640px){.tw.gw{container-type:inline-size}.cal{--gw:46px}.cal .tl{right:5px;font-size:11px}.cal .cr>.gd,.cal .cr>.dc{min-width:max(118px,calc((100cqw - 46px)/2))}}
+/* Centre schedule (staff teachers): MINE = solid brand green with a YOU tag; others muted; ICR hatched grey; online light blue; tests slate; events neutral dashed */
+.cal .ev.go{--sb:var(--c-border-strong);background:color-mix(in srgb,var(--c-surface-2) 55%,var(--c-surface));border-color:var(--c-border);color:var(--c-text);box-shadow:none}
+.cal .ev.gm{--sb:var(--brand-accent);background:var(--brand-primary);border-color:var(--brand-primary);border-left-color:var(--brand-accent);color:var(--brand-on-primary);box-shadow:0 1px 3px rgba(0,0,0,.25)}.cal .ev.gm span,.cal .ev.gm span.gt{color:inherit}.cal .ev.gm span:not(.gt):not(.you){opacity:.92}.cal .ev.gm>b{padding-right:36px}
+.cal .ev span.you{display:block!important;position:absolute;top:3px;right:4px;margin:0!important;padding:0 5px;border-radius:7px;background:var(--brand-accent);color:#1b1f05!important;font-size:10px!important;font-weight:800;letter-spacing:.04em;line-height:15px;opacity:1!important}.cal .cad .ev.gm{position:relative}
+.cal .ev.gi{--sb:var(--c-border-strong);background:repeating-linear-gradient(135deg,var(--c-surface-2) 0 6px,var(--c-surface) 6px 12px);border-color:var(--c-border);color:var(--c-text);box-shadow:none}
+.cal .ev.gn{--sb:var(--st-info);background:var(--st-info-soft);border-color:color-mix(in srgb,var(--st-info) 55%,transparent);border-left-color:var(--st-info);color:var(--st-info-text)}.cal .ev.gn span{color:inherit}.cal .ev.gn span:not(.gt){opacity:.85}
+.cal .ev.gt4{--sb:var(--subj-mixed);background:color-mix(in srgb,var(--subj-mixed) 12%,var(--c-surface));border-color:var(--subj-mixed);border-left-color:var(--subj-mixed);color:var(--c-text)}
+.cal .ev.gv{--sb:var(--c-border);background:var(--c-surface);border:1px dashed var(--c-border-strong);border-left:3px solid var(--c-border-strong);color:var(--c-text-muted);box-shadow:none}
+.gk.gm{background:var(--brand-primary);border-color:var(--brand-primary);color:var(--brand-on-primary)}.gk.go{background:color-mix(in srgb,var(--c-surface-2) 55%,var(--c-surface));border-color:var(--c-border-strong);color:var(--c-text)}.gk.gi{background:repeating-linear-gradient(135deg,var(--c-surface-2) 0 4px,var(--c-surface) 4px 8px);border-color:var(--c-border-strong);color:var(--c-text)}.gk.gn{background:var(--st-info-soft);border-color:var(--st-info);color:var(--st-info-text)}.gk.gt4{background:color-mix(in srgb,var(--subj-mixed) 12%,var(--c-surface));border-color:var(--subj-mixed);color:var(--c-text)}.gk.g3x{background:repeating-linear-gradient(135deg,var(--st-warn-soft) 0 4px,var(--c-surface) 4px 8px);border-color:var(--st-warn);color:var(--st-warn-text);text-decoration:line-through}
+.nowx{margin:0 0 10px;padding:7px 12px;border:1px solid var(--st-info);border-radius:8px;background:var(--st-info-soft);color:var(--st-info-text);font-size:13px}.nowx b{margin-right:4px}
 table.rep td,table.rep th{white-space:nowrap}table.rep td:first-child{white-space:normal;min-width:150px}table.rep{min-width:520px}
 a.wa{display:inline-block;margin:3px 0 0 6px;padding:2px 9px;border:1px solid var(--st-ok);border-radius:6px;color:var(--st-ok-text);background:var(--st-ok-soft);font-size:12.5px;text-decoration:none}a.wa:hover{background:var(--st-ok-soft)}td.mk a.wa{margin:2px 0 2px 4px}
 td.pm{white-space:nowrap;text-align:right;width:1%}td.pm:empty{visibility:hidden}input.pmi{width:70px;padding:4px 6px;font-size:13px;text-align:right}.pmv{font-weight:600}.pmbar label{display:inline-flex;align-items:center;gap:6px;margin-right:10px}.pmbar input{padding:5px 8px}@media (max-width:640px){td.pm{display:block;text-align:left!important}td.pm:empty{display:none}}
@@ -242,8 +252,9 @@ function drawWeek(){var r=WK,s=r.summary,h='<div id="wkview"></div><a class="bac
 var WKA=null,WKAC={},WKF={t:'',b:''};
 function monOf(k){var d=new Date(k+'T00:00:00Z').getUTCDay();return shiftDay(k,-((d+6)%7))}
 /* the top bar of both week pages: owner switch (My week | Whole schedule) on the left, week arrows + date range on the right */
-function wkHead(r,on){var own=!!(r.teacher&&r.teacher.owner),f=on==='all'?'openWeekAll':'openWeek',cur=monOf(r.today)===r.from,h=own?'':'<h2>My week</h2>';
- h+='<div class="tabs wkbar'+(own?' own':'')+'">';
+function wkHead(r,on){var own=!!(r.teacher&&r.teacher.owner),cen=!own&&!!(r.teacher&&r.teacher.centre),f=on==='all'?'openWeekAll':on==='centre'?'openWeekCentre':'openWeek',cur=monOf(r.today)===r.from,h=own?'':'<h2>'+(on==='centre'?'Centre schedule':'My week')+'</h2>';
+ h+='<div class="tabs wkbar'+(own||cen?' own':'')+'">';
+ if(cen)h+='<span class="seg"><button class="'+(on==='me'?'on':'')+'" onclick="openWeek(\''+r.from+'\')">My week</button><button class="'+(on==='centre'?'on':'')+'" onclick="openWeekCentre(\''+r.from+'\')">Centre schedule</button></span>';   /* staff teachers (Type = Staff): their own week or every batch; the owner keeps My week | Whole schedule */
  if(own)h+='<span class="seg"><button class="'+(on==='me'?'on':'')+'" onclick="openWeek(\''+r.from+'\')">My week</button><button class="'+(on==='all'?'on':'')+'" onclick="openWeekAll(\''+r.from+'\')">Whole schedule</button></span>';
  h+='<span class="wkr"><button class="ar" aria-label="Previous week" onclick="'+f+'(\''+shiftDay(r.from,-7)+'\')">&lsaquo;</button><span class="rng">'+niceD(r.from)+' - '+niceD(r.to)+'</span><button class="ar" aria-label="Next week" onclick="'+f+'(\''+shiftDay(r.from,7)+'\')">&rsaquo;</button>'+(cur?'':'<button class="lnk" onclick="'+f+'()">This week</button>')+'</span></div>';
  return h}
@@ -320,6 +331,39 @@ function drawWeekAll(){var r=WKA,TS=[],BS=[];
  h+='<span class="wkr"><select id="wkat" aria-label="Teacher" onchange="wkaSet(\'t\',this.value)"><option value="">All teachers</option>'+wkaOpts(TS,WKF.t)+'</select><select id="wkab" aria-label="Batch" onchange="wkaSet(\'b\',this.value)"><option value="">All batches</option>'+wkaOpts(BS,WKF.b)+'</select>'+(fl?'<button class="lnk" onclick="WKF={t:\'\',b:\'\'};drawWeekAll()">Clear</button>':'')+'</span></div>';
  h+='<div class="wkleg"><span class="gk g1">'+mk+' Marked</span><span class="gk g2">'+um+' Not marked yet</span><span class="gk g3">'+cx+' Cancelled</span><span class="sub">'+(Math.round(hr*100)/100)+' h &middot; '+n+' entries'+(fl?' (filtered)':'')+'</span></div>';
  $('app').innerHTML=h+body+tmLine(r)}
+
+/* ---------- Centre schedule (staff teachers, read-only): every batch of the centre for one day (batches across, time down), my own classes highlighted. No attendance, no rooms. ---------- */
+var WKX=null,WKXC={},WKXV={d:''};
+function fetchWeekCentre(from){var t0=Date.now();return call('t_week_centre',from?{from:from}:{}).then(function(r){if(r.ok){r._rt=Date.now()-t0;WKXC[from||'t']={r:r,t:Date.now()}}return r})}
+function openWeekCentre(from){var key=from||'t',c=WKXC[key];
+ if(c){WKX=c.r;drawWeekCentre();if(Date.now()-c.t>30000)fetchWeekCentre(from).then(function(r){if(r.ok&&$('wkcen')&&WKX.from===r.from){WKX=r;drawWeekCentre()}});return}
+ busy();fetchWeekCentre(from).then(function(r){if(!r.ok)return fail(r);WKX=r;drawWeekCentre()})}
+function wkxD(d){WKXV.d=d;drawWeekCentre()}
+function wkxNow(){var d=new Date(Date.now()+19800000);return d.getUTCHours()*60+d.getUTCMinutes()}   /* device clock, India time */
+function wkxM(t){var a=String(t||'').split(':');return a.length<2?NaN:(+a[0])*60+(+a[1])}
+function wkxEnt(x,b){var on=x.flags.indexOf('online')>=0,cx=x.state==='cancelled',
+  cls=cx?'g3':x.mine?'gm':x.type==='ICR'?'gi':x.type==='Test'?'gt4':(x.type==='Event'||x.type==='Holiday')?'gv':on?'gn':'go',
+  w=x.type==='Test'?'Test'+(x.subject?': '+x.subject:''):x.type==='Class'?(x.subject||'Class'):x.type,
+  me=String(WK&&WK.teacher&&WK.teacher.name||'').split(' ')[0],tn=x.mine&&me?x.teachers.filter(function(z){return z!==me}):x.teachers,
+  t=tn.join(', ')+(x.invig?(tn.length?' · ':'')+'Invigilation':'')+(on?(tn.length||x.invig?' · ':'')+'online':''),
+  o=x.targets.filter(function(z){return z!==b});
+ return{c:b,s:x.start,e:x.end,allday:wkLong(x),cls:cls,html:'<b>'+esc(w)+'</b>'+(t?'<span>'+esc(t)+'</span>':'')+(o.length?'<span>with '+esc(o.join(', '))+'</span>':'')+(cx?'<span>Cancelled</span>':'')+(x.mine&&!cx?'<span class="you">YOU</span>':''),title:x.flags.join(' · ')}}
+function wkxGridDay(d){var r=WKX,body='<h3'+(d.date===r.today?' style="color:var(--ac)"':'')+'>'+d.dow+' '+niceD(d.date)+(d.date===r.today?' (today)':'')+'</h3>';if(!d.items.length)return body+'<div class="sub">No classes.</div>';
+ var B=r.batches.slice(),E=[];d.items.forEach(function(x){x.targets.forEach(function(b){if(B.indexOf(b)<0)B.push(b);E.push(wkxEnt(x,b))})});
+ return body+taGrid(B.map(function(b){return{k:b,label:esc(b)}}),E)}
+function drawWeekCentre(){var r=WKX,dk=r.days.map(function(d){return d.date});
+ if(WKXV.d!=='week'&&dk.indexOf(WKXV.d)<0)WKXV.d=dk.indexOf(r.today)>=0?r.today:r.from;
+ var scope=WKXV.d==='week'?r.days:r.days.filter(function(d){return d.date===WKXV.d});
+ var h='<div id="wkcen"></div><a class="back" onclick="drawHome()">&larr; Overview</a>'+wkHead({teacher:r.teacher,from:r.from,to:r.to,today:r.today},'centre');
+ h+='<div class="tabs wkbar2"><span class="days">'+r.days.map(function(d){return'<button class="'+(WKXV.d===d.date?'on':'')+(d.date===r.today?' td':'')+'" onclick="wkxD(\''+d.date+'\')">'+d.dow.slice(0,3)+'</button>'}).join('')+'<button class="'+(WKXV.d==='week'?'on':'')+'" onclick="wkxD(\'week\')">Week</button></span></div>';
+ h+='<div class="wkleg"><span class="gk gm">Your class</span><span class="gk go">Other teacher</span><span class="gk gi">ICR</span><span class="gk gn">Online</span><span class="gk gt4">Test</span><span class="gk g3x">Cancelled</span><span class="sub">Read-only. A cancelled class frees its slot.</span></div>';
+ if(WKXV.d===r.today){var nm=wkxNow(),td=r.days.filter(function(d){return d.date===r.today})[0],busyB={};
+  td.items.forEach(function(x){if(x.state==='cancelled'||x.type==='Holiday')return;var a=wkxM(x.start),e=wkxM(x.end);if(a<=nm&&nm<e)x.targets.forEach(function(b){busyB[b]=1})});
+  var fr=r.batches.filter(function(b){return!busyB[b]}),hm=('0'+Math.floor(nm/60)).slice(-2)+':'+('0'+nm%60).slice(-2);
+  h+='<div class="nowx"><b>Now '+hm+':</b>'+(fr.length?'No class right now: '+esc(fr.join(', ')):'every batch has something on right now.')+'</div>'}
+ h+=scope.map(wkxGridDay).join('');
+ $('app').innerHTML=h+tmLine(r);
+ if(scope.length===1){var w=document.querySelector('#app .tw.gw'),g=w&&w.querySelector('.cb .ev.gm');if(g){var dc=g.parentNode,wr=w.getBoundingClientRect(),gr=dc.getBoundingClientRect();if(gr.right>wr.right)w.scrollLeft=Math.max(0,gr.left-wr.left-w.querySelector('.cb .gs').offsetWidth)}}}   /* the grid is wider than the screen: open with my first class in view */
 
 /* ---------- Attendance (Phase B): the day's classes, one combined list per class, pick a status from the dropdown, save ---------- */
 var ATT={date:'',data:null,ro:null,marks:{},list:[],extra:null,force:false,cancelled:false,msg:''};
