@@ -234,7 +234,7 @@ table.gr td.g4{--sb:var(--subj-mixed);background:color-mix(in srgb,var(--subj-mi
 table.gr td.g5{--sb:var(--c-border-strong);background:color-mix(in srgb,var(--c-text-muted) 9%,var(--c-surface));color:var(--c-text-muted)}table.gr td.g5 .gi span{color:inherit;opacity:.85}
 table.gr td.g3{--sb:var(--c-text-muted);background:repeating-linear-gradient(135deg,var(--c-surface-2) 0 6px,var(--c-surface) 6px 12px);color:var(--c-text-muted)}table.gr td.g3 .gi span,table.gr td.g3 .gi b{color:inherit}table.gr td.g3 .gi b{text-decoration:line-through}
 table.gr th.gs{position:sticky}table.gr th.gs .tl{display:block;position:relative;top:-.62em;line-height:1}table.gr th.gs .tl0{top:0}table.gr th.gs .tle{position:absolute;left:6px;bottom:1px;font-size:10.5px;font-weight:400;color:var(--c-text-muted)}
-table.gr th{border-bottom:2px solid var(--c-border-strong)}
+table.gr th{border-bottom:2px solid var(--c-border-strong)}table.gr tr.gend,table.gr tr.gend td{height:16px;border:0;background:transparent;box-shadow:none}table.gr tr.gend th.gs{vertical-align:top}
 table.gr td.gx{outline:2px solid var(--st-warn);outline-offset:-2px}table.gr .gt{display:block;font-size:11px;opacity:.8}
 @media(max-width:640px){#myweek .gw{max-height:none}#myweek table.gr{min-width:760px}}
 
@@ -472,7 +472,7 @@ function taGrid(cols,ents){var m=function(x){var a=String(x).split(':');return(+
  var ad=[],nm=[],B=[],C={},rs=[];ents.forEach(function(x){if(x.allday||!(m(x.e)>m(x.s)))ad.push(x);else nm.push(x)});
  nm.forEach(function(x){[m(x.s),m(x.e)].forEach(function(v){if(B.indexOf(v)<0)B.push(v)})});B.sort(function(a,b){return a-b});var cov=[],RI=[],RS=[],nr=0;for(var q=0;q<B.length-1;q++)cov.push(false);
  nm.forEach(function(x){for(var q=B.indexOf(m(x.s));q<B.indexOf(m(x.e));q++)cov[q]=true});
- cov.forEach(function(c,q){if(c){RI[q]=nr;RS.push(q);nr++}});
+ cov.forEach(function(c,q){RI[q]=q;RS.push(q);nr++});   /* every band between two times is a row; its height follows its length (a gap with no class is a thin band) */
  cols.forEach(function(c){C[c.k]={ents:[],ad:[],n:1,g:[]}});nm.forEach(function(x){if(C[x.c])C[x.c].ents.push(x)});ad.forEach(function(x){if(C[x.c])C[x.c].ad.push(x)});
  cols.forEach(function(c){var o=C[c.k],ends=[];o.ents.sort(function(a,b){return m(a.s)-m(b.s)||m(a.e)-m(b.e)});
   o.ents.forEach(function(x){var L=-1;for(var i=0;i<ends.length;i++)if(ends[i]<=m(x.s)){L=i;break}if(L<0){L=ends.length;ends.push(0)}ends[L]=m(x.e);x.lane=L});
@@ -481,10 +481,11 @@ function taGrid(cols,ents){var m=function(x){var a=String(x).split(':');return(+
   if(o.n>1)o.ents.forEach(function(x){o.ents.forEach(function(y){if(x!==y&&m(x.s)<m(y.e)&&m(y.s)<m(x.e))x.gx=true})})});
  var h='<div class="tw gw"><table class="gr"><tr><th class="gs"></th>'+cols.map(function(c){return'<th colspan="'+C[c.k].n+'" class="gcl'+(c.cls?' '+c.cls:'')+'">'+c.label+'</th>'}).join('')+'</tr>';
  if(ad.length){h+='<tr class="gad"><th class="gs">All day</th>'+cols.map(function(c){var o=C[c.k];var tc=c.cls==='gtd'?' gtc':'';return o.ad.length?'<td class="gc ga gcl'+tc+'" colspan="'+o.n+'">'+o.ad.map(function(x){return'<div class="gi">'+x.html+'</div>'}).join('')+'</td>':'<td class="ge gcl'+tc+'" colspan="'+o.n+'"></td>'}).join('')+'</tr>'}
- for(var r=0;r<nr;r++){var endl=(r===nr-1||RS[r+1]!==RS[r]+1)?'<span class="tle">'+hm(B[RS[r]+1])+'</span>':'';h+='<tr'+(rs[r]?'':' class="gsm"')+'><th class="gs"><span class="tl'+(r===0&&!ad.length?' tl0':'')+'">'+hm(B[RS[r]])+'</span>'+endl+'</th>';
+ for(var r=0;r<nr;r++){var du=B[r+1]-B[r],H=cov[r]?Math.max(du*1.0,24):Math.max(Math.min(du,18),14);h+='<tr'+(rs[r]?'':' class="gsm"')+' style="height:'+Math.round(H)+'px"><th class="gs"><span class="tl'+(r===0&&!ad.length?' tl0':'')+'">'+hm(B[r])+'</span></th>';
   cols.forEach(function(c){var o=C[c.k];for(var l=0;l<o.n;l++){var x=o.g[l][r];if(x==='s')continue;var ce=(l===o.n-1?' gcl':'')+(c.cls==='gtd'?' gtc':'');if(!x){h+='<td class="ge'+ce+'"></td>';continue}
    h+='<td class="gc'+ce+(x.cls?' '+x.cls:'')+(x.gx?' gx':'')+'" rowspan="'+x.span+'"'+(x.title?' title="'+esc(x.title)+'"':'')+'><div class="gi">'+x.html+'<span class="gt">'+esc(x.s)+'-'+esc(x.e)+'</span>'+(x.gx?'<span class="gt">clash</span>':'')+'</div></td>'}});
   h+='</tr>'}
+ if(nr>0){var ln=0;cols.forEach(function(c){ln+=C[c.k].n});h+='<tr class="gend"><th class="gs"><span class="tl">'+hm(B[B.length-1])+'</span></th><td colspan="'+ln+'"></td></tr>'}
  return h+'</table></div>'}
 function mwLong(x){var a=String(x.start).split(':'),e=String(x.end).split(':');return x.type==='ICR'&&((+e[0])*60+ +e[1])-((+a[0])*60+ +a[1])>=240}
 function openMyWeek(from){if(!CRED)return;$('amenu').hidden=true;$('acct').setAttribute('aria-expanded','false');show1('myweek');$('mwc').innerHTML='<p>Loading...</p>';
